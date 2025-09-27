@@ -18,7 +18,7 @@ public class GeminiAiIntegration {
     @Value("${api.gemini-key}")
     private String apiKey;
     
-    private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent";
+    private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
     
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -70,9 +70,8 @@ public class GeminiAiIntegration {
         sb.append(String.format("Net Income: $%.2f. ", summary.getNetIncome()));
 
         sb.append("Expenses Breakdown: ");
-        for (Map.Entry<String, Double> entry : summary.getExpenses().entrySet()) {
-            sb.append(String.format("%s: $%.2f, ", entry.getKey(), entry.getValue()));
-        }
+        summary.getCategories().forEach((category, amount) -> 
+            sb.append(String.format("%s: $%.2f, ", category, amount)));
 
         return sb.toString();
     }
@@ -88,6 +87,7 @@ public class GeminiAiIntegration {
         
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("x-goog-api-key", apiKey);
         
         // Create the request body according to Gemini API specification
         Map<String, Object> requestBody = new HashMap<>();
@@ -107,11 +107,12 @@ public class GeminiAiIntegration {
         requestBody.put("generationConfig", generationConfig);
         
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
-        
-        // Make the API call with API key in URL
-        String urlWithKey = GEMINI_API_URL + "?key=" + apiKey;
-        ResponseEntity<String> response = restTemplate.postForEntity(urlWithKey, request, String.class);
-        
+
+        ResponseEntity<String> response = restTemplate.postForEntity(GEMINI_API_URL, request, String.class);
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("Gemini API request failed with status: " + response.getStatusCode() + " - " + response.getBody());
+        }
         // Parse the response JSON
         JsonNode responseJson = objectMapper.readTree(response.getBody());
         JsonNode candidatesNode = responseJson.path("candidates");
