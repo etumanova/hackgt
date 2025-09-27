@@ -6,12 +6,9 @@ document.addEventListener("DOMContentLoaded", function() {
   const sendBtn = document.getElementById("chatbot-send");
   const messages = document.getElementById("chatbot-messages");
 
-  // Load saved messages from localStorage
-  const savedMessages = localStorage.getItem('chatbotMessages');
-  if (savedMessages) {
-    messages.innerHTML = savedMessages;
-    messages.scrollTop = messages.scrollHeight;
-  }
+  // Clear saved message on page load toclear past chat history
+  localStorage.removeItem('chatbotMessages');
+  messages.innerHTML = "";
 
   // Load visibility state from localStorage
   const isOpen = localStorage.getItem('chatbotOpen') === 'true';
@@ -20,13 +17,19 @@ document.addEventListener("DOMContentLoaded", function() {
   // Toggle chat visibility when button is clicked
   button.addEventListener("click", () => {
     const currentlyOpen = windowBox.style.display === "flex";
-    windowBox.style.display = currentlyOpen ? "none" : "flex";
-    localStorage.setItem('chatbotOpen', !currentlyOpen);
     
     // Focus on input when opening
     if (!currentlyOpen) {
+      messages.innerHTML = "";
+      localStorage.removeItem('chatbotMessages');
+      // load welcome message
+      addMessage("Gemini", "Hi! I'm your AI financial assistant." +
+        " Ask me anything about budgeting, saving, or managing money as a student!");
       inputField.focus();
     }
+
+    windowBox.style.display = currentlyOpen ? "none" : "flex";
+    localStorage.setItem('chatbotOpen', !currentlyOpen);
   });
 
   closeBtn.addEventListener("click", () => {
@@ -127,8 +130,12 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  // Add welcome message on first load
-  if (!savedMessages) {
-    addMessage("Gemini", "Hi! I'm your AI financial assistant. Ask me anything about budgeting, saving, or managing money as a student! 💰");
+   // Load saved messages from localStorage
+  const savedMessages = localStorage.getItem('chatbotMessages');
+  if (savedMessages) {
+    messages.innerHTML = savedMessages;
+    messages.scrollTop = messages.scrollHeight;
   }
+
+
 });
