@@ -1,3 +1,51 @@
+/* Main flex layout for page */
+.main-flex-layout {
+  display: flex;
+  min-height: calc(100vh - 50px);
+}
+
+/* Content and right-side box */
+.content-and-side {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.side-box {
+  width: 35%;
+  min-width: 300px;
+  margin-left: 1.2%;
+  display: flex;
+  flex-direction: column;
+}
+
+.savings-box {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.savings-amount {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.portfolio-list {
+  height: 250px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow-y: auto;
+  background: white;
+  padding: 10px;
+}
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -42,7 +90,7 @@ nav {
   padding-top: 20px;
   z-index: 9;
 }
-
+ 
 /* Sidebar buttons */
 nav button {
   background: none;
