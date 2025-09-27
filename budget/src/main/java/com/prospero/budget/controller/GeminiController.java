@@ -27,17 +27,38 @@ public class GeminiController {
                 return response;
             }
 
-            // Enhanced prpompt for better financial advice context
-            String financialPrompt = String.format(
-                "You are a helpful financial assistant for college students using a budgeting app called 'Prospera'." +
-                "The user asked: '%s'. " +
-                "Provide practical, friendly advice in 2-3 sentences. " +
-                "Focus on student-specific financial tips when relevant.",
-                userMessage.trim()
-            );
+            // Determine question type: "budgeting" default or "investment"
+            String type = (String) request.getOrDefault("type", "budgeting");
 
-            String geminiResponse = geminiAiIntegration.generateTextFromPrompt(financialPrompt);
-            response.put("reply", geminiResponse);
+            String prompt;
+
+            if ("investment".equalsIgnoreCase(type)) {
+                // Extracting investment params or using defaults
+                Double availableAmount = request.get("amount") != null ?
+                    Double.valueOf(request.get("amount").toString()) : 0.0;
+                String timeHorizon = (String) request.getOrDefault("timeHorizon", "4 years");
+                String riskTolerance = (String) request.getOrDefault("riskTolerance", "moderate");
+
+                prompt = String.format(
+                    "You are a investment advisor for college students. The user has $%.2f to invest with a time horizon of %s and a %s risk tolerance. " +
+                    "They asked: '%s'. Provide practical, beginner-friendly investment advice in 3-4 sentences. " +
+                    "Focus on low-cost index funds, ETFs, and student-appropriate strategies. " +
+                    "Always emphasize the importance of emergency funds first. " +
+                    "Mention specific platforms like Robinhood, Fidelity, or Vanguard when relevant. ",
+                    userMessage.trim(), availableAmount, timeHorizon, riskTolerance);
+                } else {
+                    // Default to budgeting advice prompt
+                    prompt = String.format(
+                        "You are a helpful financial assistant for college students using a budgeting app called 'Prospera'." +
+                        "The user asked: '%s'. " +
+                        "Provide practical, friendly advice in 2-3 sentences. " +
+                        "Focus on student-specific financial tips when relevant.",
+                        userMessage.trim()
+                    );
+                }
+
+                String geminiResponse = geminiAiIntegration.generateTextFromPrompt(prompt);
+                response.put("reply", geminiResponse);
         } catch (Exception e) {
             System.err.println("Chat error: " + e.getMessage());
             response.put("reply", "Sorry, I'm having trouble responding right now.");

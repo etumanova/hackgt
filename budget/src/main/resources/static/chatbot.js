@@ -21,7 +21,12 @@ document.addEventListener("DOMContentLoaded", function() {
   button.addEventListener("click", () => {
     const currentlyOpen = windowBox.style.display === "flex";
     windowBox.style.display = currentlyOpen ? "none" : "flex";
-    localStorage.setItem('chatbotOpen', !currentlyOpen); // save state
+    localStorage.setItem('chatbotOpen', !currentlyOpen);
+    
+    // Focus on input when opening
+    if (!currentlyOpen) {
+      inputField.focus();
+    }
   });
 
   closeBtn.addEventListener("click", () => {
@@ -29,47 +34,101 @@ document.addEventListener("DOMContentLoaded", function() {
     localStorage.setItem('chatbotOpen', false);
   });
 
+  function addMessage(sender, text, isError = false) {
+    const msgDiv = document.createElement("div");
+    msgDiv.style.margin = "5px 0";
+    msgDiv.style.padding = "8px";
+    msgDiv.style.borderRadius = "8px";
+    
+    if (sender === "You") {
+      msgDiv.style.backgroundColor = "#7e58d6";
+      msgDiv.style.color = "white";
+      msgDiv.style.textAlign = "right";
+    } else {
+      msgDiv.style.backgroundColor = isError ? "#ffebee" : "#f1f1f1";
+      msgDiv.style.color = isError ? "#d32f2f" : "#333";
+    }
+    
+    msgDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    messages.appendChild(msgDiv);
+    
+    // Save to localStorage
+    localStorage.setItem('chatbotMessages', messages.innerHTML);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
   async function sendMessage() {
     const text = inputField.value.trim();
     if (!text) return;
 
+    // Disable input while processing
+    inputField.disabled = true;
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Sending...";
+
     // Display user message
-    const userMsg = document.createElement("div");
-    userMsg.textContent = "You: " + text;
-    messages.appendChild(userMsg);
-
-    // Save updated messages to localStorage
-    localStorage.setItem('chatbotMessages', messages.innerHTML);
-
+    addMessage("You", text);
     inputField.value = "";
-    messages.scrollTop = messages.scrollHeight;
 
-    // Send to backend Gemini endpoint
     try {
+      console.log("Sending message to API:", text); // Debug log
+      
       const response = await fetch("/api/gemini/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
         body: JSON.stringify({ message: text })
       });
+
+      console.log("Response status:", response.status); // Debug log
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const data = await response.json();
+      console.log("Response data:", data); // Debug log
 
-      const botMsg = document.createElement("div");
-      botMsg.textContent = "Gemini: " + data.reply;
-      messages.appendChild(botMsg);
+      if (data.reply) {
+        addMessage("Gemini", data.reply);
+      } else {
+        addMessage("Gemini", "I received your message but couldn't generate a response.", true);
+      }
 
-      // Save bot reply to localStorage too
-      localStorage.setItem('chatbotMessages', messages.innerHTML);
-      messages.scrollTop = messages.scrollHeight;
     } catch (error) {
-      const botMsg = document.createElement("div");
-      botMsg.textContent = "Gemini: Sorry, something went wrong.";
-      messages.appendChild(botMsg);
-      localStorage.setItem('chatbotMessages', messages.innerHTML);
+      console.error("Chat error:", error);
+      
+      let errorMessage = "Sorry, I'm having trouble connecting. ";
+      if (error.message.includes("404")) {
+        errorMessage += "The chat service isn't available right now.";
+      } else if (error.message.includes("500")) {
+        errorMessage += "There's a server issue. Please try again in a moment.";
+      } else {
+        errorMessage += "Please check your internet connection and try again.";
+      }
+      
+      addMessage("Gemini", errorMessage, true);
+    } finally {
+      // Re-enable input
+      inputField.disabled = false;
+      sendBtn.disabled = false;
+      sendBtn.textContent = "Send";
+      inputField.focus();
     }
   }
 
   sendBtn.addEventListener("click", sendMessage);
   inputField.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") sendMessage();
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
   });
+
+  // Add welcome message on first load
+  if (!savedMessages) {
+    addMessage("Gemini", "Hi! I'm your AI financial assistant. Ask me anything about budgeting, saving, or managing money as a student! 💰");
+  }
 });
