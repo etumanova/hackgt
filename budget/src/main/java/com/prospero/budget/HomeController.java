@@ -10,4 +10,14 @@ public class HomeController {
     public String home() {
         return "index";
     }
+
+    @GetMapping("/budgeter")
+    public String budgeter() {
+        return "budgeter";  // resolves to templates/budgeter.html
+    }
+
+    @GetMapping("/invest")
+    public String invest() {
+        return "invest";  // resolves to templates/invest.html
+    }
 }
