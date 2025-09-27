@@ -67,9 +67,72 @@
       <div class="content-and-side">
         <div class="main-content">
           <!-- Graph Box -->
-          <div class="graph-box">
               <!-- SVG graph goes here -->
-          </div>
+              <div class="graph-box">
+                <h2>Find the Best Investment Account for You</h2>
+                <form id="investment-form">
+                  <label for="investment-amount">How much money are you investing?</label>
+                  <select id="investment-amount" name="investment-amount">
+                    <option value="100-1000">$100 - $1,000</option>
+                    <option value="1000-7000">$1,000 - $7,000</option>
+                    <option value="7000+">$7,000+</option>
+                  </select>
+              
+                  <label for="investment-duration">How long do you want to invest for?</label>
+                  <select id="investment-duration" name="investment-duration">
+                    <option value="<1"><1 year</option>
+                    <option value="1-5">1 - 5 years</option>
+                    <option value="5+">5+ years</option>
+                  </select>
+              
+                  <button type="button" id="submit-investment">Submit</button>
+                </form>
+              </div>
+              
+              <!-- Pop-up Modal -->
+              <div id="investment-popup" class="popup hidden">
+                <div class="popup-content">
+                  <h3>Recommended Investment Options</h3>
+                  <ul id="investment-options"></ul>
+                  <button id="close-popup">Close</button>
+                </div>
+              </div>
+
+              <script>
+                document.getElementById('submit-investment').addEventListener('click', function () {
+                  const amount = document.getElementById('investment-amount').value;
+                  const duration = document.getElementById('investment-duration').value;
+            
+                  const options = [];
+                  if (duration === '<1') {
+                    options.push('Suggested for you: Keep the money in a high-yield savings account.');
+                  } else if (duration === '1-5') {
+                    options.push('Suggested for you: Open a CD or a high-yield savings account');
+                  }else if (amount === '100-1000' && duration === '5+') {
+                    options.push('Suggested for you: Open an IRA and contribute regularly.');
+                  } else if (amount === '1000-7000' && duration === '5+') {
+                    options.push('Suggested for you: Open an IRA and contribute to an index fund.');
+                  } else if (amount === '7000+' && duration === '5+') {
+                    options.push('Suggested for you: Open an IRA or standard brokerage account.');
+                  } else {
+                    options.push('Consult a Financial Advisor for personalized advice.');
+                  }
+
+                  const optionsList = document.getElementById('investment-options');
+                  optionsList.innerHTML = '';
+                  options.forEach(option => {
+                  const li = document.createElement('li');
+                  li.textContent = option;
+                  optionsList.appendChild(li);
+                });
+
+                  document.getElementById('investment-popup').classList.remove('hidden');
+                });
+
+    document.getElementById('close-popup').addEventListener('click', function () {
+      document.getElementById('investment-popup').classList.add('hidden');
+    });
+  </script>    
         </div>
         <div class="side-box">
           <div class="portfolio-list">
