@@ -7,10 +7,43 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class GeminiController {
     @Autowired
     private GeminiAiIntegration geminiAiIntegration;
+
+    @PostMapping("/api/gemini/chat")
+    public Map<String, String>handleChatMessage(@RequestBody Map<String, String> request) {
+        Map<String, String> response = new HashMap<>();
+
+        try {
+            String userMessage = request.get("message");
+            if (userMessage == null || userMessage.trim().isEmpty()) {
+                response.put("reply", "I didn't receive your message. Please try again");
+                return response;
+            }
+
+            // Enhanced prpompt for better financial advice context
+            String financialPrompt = String.format(
+                "You are a helpful financial assistant for college students using a budgeting app called 'Prospera'." +
+                "The user asked: '%s'. " +
+                "Provide practical, friendly advice in 2-3 sentences. " +
+                "Focus on student-specific financial tips when relevant.",
+                userMessage.trim()
+            );
+
+            String geminiResponse = geminiAiIntegration.generateTextFromPrompt(financialPrompt);
+            response.put("reply", geminiResponse);
+        } catch (Exception e) {
+            System.err.println("Chat error: " + e.getMessage());
+            response.put("reply", "Sorry, I'm having trouble responding right now.");
+        }
+        return response;
+    }
 
     /*
      * Test endpoint to verify Gemini integration
