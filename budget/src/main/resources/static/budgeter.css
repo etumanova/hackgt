@@ -1,7 +1,88 @@
+/* Main flex layout for page */
+.main-flex-layout {
+    display: flex;
+    min-height: calc(100vh - 50px);
+  }
+
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
 }
+
+.main-content {
+    flex: 1;
+  }
+  
+  h1 {
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-family: 'Familjen Grotesk', sans-serif;
+  }
+
+  /* Header */
+header {
+    position: fixed;
+    top: 0;
+    height: 52px;
+    width: 100%;
+    background: #1C2541;
+    background: linear-gradient(45deg, rgba(28, 37, 65, 1) 0%, rgba(126, 88, 214, 1) 76%, rgba(165, 127, 219, 1) 100%);
+    color: white;
+    display: flex;
+    align-items: flex-start;
+    padding: 8px 40px 0 40px;
+    font-weight: bold;
+    z-index: 10;
+    font-family: 'Familjen Grotesk', sans-serif;
+    font-size: 32px;
+  }
+
+  /* Layout */
+main {
+    margin-left: 100px;
+    margin-top: 60px;
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  /* Sidebar */
+  nav {
+    position: fixed;
+    top: 50px;
+    width: 80px;
+    height: 100%;
+    background: #ffffff;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    z-index: 9;
+  }
+   
+  /* Sidebar buttons */
+  nav button {
+    background: none;
+    border: none;
+    color: black;
+    margin: 20px 0;
+    cursor: pointer;
+    width: 100%;
+    padding: 10px 0;
+    transition: background 0.3s ease;
+    font-family: 'Albert Sans', Arial, sans-serif;
+  }
+  
+  .familjen-grotesk {
+    font-family: 'Familjen Grotesk', Arial, sans-serif !important;
+  }
+  
+  nav button:hover {
+    background: #00C48C; /* hover effect */
+    color: white;
+  }
 
 form {
     margin-bottom: 20px;
