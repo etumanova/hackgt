@@ -44,9 +44,10 @@ h1 {
 }
 
 .savings-amount {
-  font-size: 24px;
+  font-size: 40px;
   font-weight: bold;
   font-family: 'Albert Sans', sans-serif;
+  color:#6745CD;
 }
 
 .portfolio-list {
@@ -85,8 +86,8 @@ header {
 
 /* Layout */
 main {
-  margin-left: 100px;
-  margin-top: 60px;
+  margin-left: 200px;
+  margin-top: 20px;
   flex: 1;
   padding: 20px;
   overflow-y: auto;
@@ -95,29 +96,32 @@ main {
 /* Sidebar */
 nav {
   position: fixed;
-  top: 50px;
-  width: 80px;
+  top: 0;                /* Full height now */
+  left: 0;
+  width: 180px;
   height: 100%;
-  background: #ffffff;
-  border-right: 1px solid #ddd;
+  background: linear-gradient(to bottom, #1C2541, #7E58D6);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px;
-  z-index: 9;
+  padding-top: 30px;
 }
  
 /* Sidebar buttons */
 nav button {
   background: none;
   border: none;
-  color: black;
+  color: white;
   margin: 20px 0;
   cursor: pointer;
   width: 100%;
   padding: 10px 0;
   transition: background 0.3s ease;
   font-family: 'Albert Sans', Arial, sans-serif;
+  display: flex;
+  align-items: center; 
+  gap: 8px;
+  padding-left: 40px;
 }
 
 .familjen-grotesk {
@@ -127,6 +131,7 @@ nav button {
 nav button:hover {
   background: #00C48C; /* hover effect */
   color: white;
+  font-weight:600;
 }
 
 /* Graph container */
@@ -152,4 +157,182 @@ nav button:hover {
   font-size: 20px;
   margin-bottom: 10px;
   font-family: 'Familjen Grotesk', sans-serif;
+  font-weight: 400;
+}
+
+
+form {
+    margin-bottom: 20px;
+    margin-left: 50px;
+}
+
+label {
+    margin-right: 10px;
+}
+
+input, select, button {
+    margin: 5px 0;
+    padding: 5px;
+}
+
+pre {
+    background-color: #f4f4f4;
+    padding: 30px;
+    border: 1px solid #ddd;
+}
+
+.brand-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 5  0px;
+    font-family: 'Familjen Grotesk', sans-serif;
+
+}
+
+.brand-logo {
+  height: 24px;
+  width: auto; 
+  margin-left: 0px;
+  vertical-align: top-middle; 
+}
+
+/* Form styling like other pages */
+.budget-form {
+    margin-left: 50px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+label {
+    font-family: 'Familjen Grotesk', sans-serif;
+    font-weight: 500;
+}
+
+input, select {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-family: 'Albert Sans', sans-serif;
+    font-size: 16px;
+}
+
+button.btn {
+    background-color: #6745CD;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Albert Sans', sans-serif;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+button.btn:hover {
+    background-color: #5a38b8;
+}
+
+.summary-box {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 20px;
+    max-width: 700px;
+    margin-left: 50px;
+    font-family: 'Albert Sans', sans-serif;
+    font-size: 16px;
+    white-space: pre-wrap;
+}
+
+
+/* Floating circle button */
+#chatbot-button {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #6745CD;
+  color: white;
+  font-size: 28px;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+#chatbot-button svg {
+  transform: translate(2px, -2px);
+}
+
+
+#chatbot-button:hover {
+  transform: scale(1.1);
+}
+
+/* Chat window */
+#chatbot-window {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 300px;
+  height: 400px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  display: none; /* hidden by default */
+  flex-direction: column;
+  z-index: 999;
+  overflow: hidden;
+}
+
+#chatbot-header {
+  background: #7E58D6;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#chatbot-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+#chatbot-input {
+  display: flex;
+  border-top: 1px solid #ccc;
+}
+
+#chatbot-input input {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  outline: none;
+}
+
+#chatbot-input button {
+  background: #7E58D6;
+  color: white;
+  border: none;
+  padding: 0 15px;
+  cursor: pointer;
 }

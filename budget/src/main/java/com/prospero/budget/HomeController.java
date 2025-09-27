@@ -20,4 +20,5 @@ public class HomeController {
     public String invest() {
         return "invest";  // resolves to templates/invest.html
     }
+
 }
