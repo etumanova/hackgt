@@ -55,7 +55,7 @@ h1 {
 }
 
 .portfolio-list {
-  height: 300px;
+  height: 350px;
   border: 1px solid #ddd;
   border-radius: 6px;
   overflow-y: auto;
@@ -166,7 +166,7 @@ nav button:hover {
 /* Graph container */
 .graph-box {
   width: 100%;
-  height: 300px;
+  height: 350px;
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 10px;
@@ -371,3 +371,91 @@ button.btn:hover {
 #chatbot-input button:hover {
   background: #00C48C;
 }
+
+/*Investment page questionnaire form*/
+.graph-box {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 400px;
+    margin: 20px auto;
+  }
+  
+  .graph-box label {
+    display: block;
+    margin: 10px 0 5px;
+  }
+  
+  .graph-box select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .graph-box button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .graph-box button:hover {
+    background-color: #0056b3;
+  }
+  
+  .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup.hidden {
+    display: none;
+  }
+  
+  .popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 300px;
+    width: 100%;
+  }
+  
+  .popup-content h3 {
+    margin-bottom: 15px;
+  }
+  
+  .popup-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px;
+  }
+  
+  .popup-content ul li {
+    margin: 5px 0;
+  }
+  
+  .popup-content button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .popup-content button:hover {
+    background-color: #0056b3;
+  }
