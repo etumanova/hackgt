@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="invest.css" />
+  <link rel="stylesheet" href="/style.css" />
 
   <script>
     // JavaScript to handle button clicks and update contributions
@@ -80,7 +80,7 @@
             <div class="portfolio-card" id = "tfsa">TFSA Account
                 <div class="account-desc">
                     The yearly contribution limit is: $7,000 CAD.<br>
-                    <button onclick="updateContribution('tfsa', 100)">Contribute More</button>
+                    <button class="btn" onclick="updateContribution('tfsa', 100)">Contribute More</button>
                  <br>You have contributed: <span class="contribution-amount">$100.00</span> CAD.
              </div>
             </div>
@@ -88,7 +88,7 @@
             <div class="portfolio-card">CD
                 <div class="account-desc">
                     Your CD matures in 30 days with 5% interest.<br>
-                 <button onclick="alert('Withdraw Early')">Withdraw Early</button>
+                 <button class="btn" onclick="alert('Withdraw Early')">Withdraw Early</button>
                  <br> You have contributed: $1,500 USD.
              </div>
             </div>
@@ -96,7 +96,7 @@
             <div class="portfolio-card">HYSA
                 <div class="account-desc">
                     You currently have no earnings in this account.<br>
-                 <button onclick="alert('Open today')">Open today</button>
+                 <button class="btn" onclick="alert('Open today')">Open today</button>
                  <br>Current rate: 2.9%.
              </div>
             </div>
