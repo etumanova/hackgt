@@ -1,3 +1,7 @@
+::selection {
+    background-color: #00df9c75;
+}
+
 /* Main flex layout for page */
 .main-flex-layout {
   display: flex;
@@ -247,34 +251,19 @@ button.btn {
 }
 
 button.btn:hover {
-    background-color: #5a38b8;
+    background-color: #00C48C;
 }
 
 
 #summary {
     margin-left: 221px; 
     max-width: 700px;
-    background-color: #f4f4f4;
+    background-color: #ffffff;
     padding: 20px; 
     border: 1px solid #ddd;
     border-radius: 6px;
     white-space: pre-wrap;
 }
-
-.summary-box {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 20px;
-    max-width: 700px;
-    margin-left: 0px;
-    font-family: 'Albert Sans', sans-serif;
-    font-size: 16px;
-    white-space: pre-wrap;
-
-}
-
-
 
 /* Floating circle button */
 #chatbot-button {
@@ -304,6 +293,7 @@ button.btn:hover {
 
 #chatbot-button:hover {
   transform: scale(1.1);
+  background: #00C48C;
 }
 
 /* Chat window */
@@ -360,4 +350,8 @@ button.btn:hover {
   border-radius: 48px;
   margin-right: 5px;
   width: 80px;
+}
+
+#chatbot-input button:hover {
+  background: #00C48C;
 }
