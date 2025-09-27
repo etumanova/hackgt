@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Summary</title>
+    <link rel="stylesheet" href="budgeter.css">
+</head>
+<body>
+    <h1>Budget Summary</h1>
+    <form id="budgetForm">
+        <label for="income">Monthly Income:</label>
+        <input type="number" id="income" name="income" required>
+        <button type="button" onclick="setIncome()">Set Income</button>
+        <br><br>
+        <label for="category">Expense Category:</label>
+        <select id="category" name="category">
+            <option value="food">Food</option>
+            <option value="tuition">Tuition</option>
+            <option value="rent">Rent</option>
+            <option value="bills">Bills</option>
+            <option value="other">Other</option>
+        </select>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required>
+        <button type="button" onclick="addExpense()">Add Expense</button>
+    </form>
+    <h2>Summary</h2>
+    <pre id="summary"></pre>
+    <script>
+        const apiUrl = '/api/budget';
+
+        async function setIncome() {
+            const income = document.getElementById('income').value;
+            await fetch(`${apiUrl}/income?income=${income}`, { method: 'POST' });
+            updateSummary();
+        }
+
+        async function addExpense() {
+            const category = document.getElementById('category').value;
+            const amount = document.getElementById('amount').value;
+            await fetch(`${apiUrl}/expense?category=${category}&amount=${amount}`, { method: 'POST' });
+            updateSummary();
+        }
+
+        async function updateSummary() {
+            const response = await fetch(`${apiUrl}/summary`);
+            const summary = await response.json();
+            document.getElementById('summary').textContent = JSON.stringify(summary, null, 2);
+        }
+
+        updateSummary();
+    </script>
+</body>
+</html>
