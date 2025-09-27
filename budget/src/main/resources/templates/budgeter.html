@@ -44,7 +44,7 @@
 </nav>
 
      <main>
-        <h1 class="familjen-grotesk">Budget Summary</h1>
+        <h1 class="familjen-grotesk">My Budgets</h1>
         </main>
 
     <form id="budgetForm" class="budget-form">
@@ -69,8 +69,10 @@
             <button type="button" class="btn" onclick="addExpense()">Add Expense</button>
         </div>
     </form>
-    <h2>Summary</h2>
+    <h3 class="subheadings" style="margin-left: 221px; margin-bottom: 8px;">Summary Statement</h3>
     <pre id="summary"></pre>
+    
+
     <script>
         const apiUrl = '/api/budget';
 
@@ -103,7 +105,7 @@
 </svg></div>
 
 <div id="chatbot-window">
-  <div id="chatbot-header">
+  <div id="chatbot-header" class="familjen-grotesk">
     Gemini Chat
     <span id="chatbot-close" style="cursor:pointer;">✖</span>
   </div>

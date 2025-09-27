@@ -6,12 +6,27 @@ document.addEventListener("DOMContentLoaded", function() {
   const sendBtn = document.getElementById("chatbot-send");
   const messages = document.getElementById("chatbot-messages");
 
+  // Load saved messages from localStorage
+  const savedMessages = localStorage.getItem('chatbotMessages');
+  if (savedMessages) {
+    messages.innerHTML = savedMessages;
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  // Load visibility state from localStorage
+  const isOpen = localStorage.getItem('chatbotOpen') === 'true';
+  windowBox.style.display = isOpen ? 'flex' : 'none';
+
+  // Toggle chat visibility when button is clicked
   button.addEventListener("click", () => {
-    windowBox.style.display = (windowBox.style.display === "none" || windowBox.style.display === "") ? "flex" : "none";
+    const currentlyOpen = windowBox.style.display === "flex";
+    windowBox.style.display = currentlyOpen ? "none" : "flex";
+    localStorage.setItem('chatbotOpen', !currentlyOpen); // save state
   });
 
   closeBtn.addEventListener("click", () => {
     windowBox.style.display = "none";
+    localStorage.setItem('chatbotOpen', false);
   });
 
   async function sendMessage() {
@@ -22,6 +37,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const userMsg = document.createElement("div");
     userMsg.textContent = "You: " + text;
     messages.appendChild(userMsg);
+
+    // Save updated messages to localStorage
+    localStorage.setItem('chatbotMessages', messages.innerHTML);
 
     inputField.value = "";
     messages.scrollTop = messages.scrollHeight;
@@ -38,11 +56,15 @@ document.addEventListener("DOMContentLoaded", function() {
       const botMsg = document.createElement("div");
       botMsg.textContent = "Gemini: " + data.reply;
       messages.appendChild(botMsg);
+
+      // Save bot reply to localStorage too
+      localStorage.setItem('chatbotMessages', messages.innerHTML);
       messages.scrollTop = messages.scrollHeight;
     } catch (error) {
       const botMsg = document.createElement("div");
       botMsg.textContent = "Gemini: Sorry, something went wrong.";
       messages.appendChild(botMsg);
+      localStorage.setItem('chatbotMessages', messages.innerHTML);
     }
   }
 
