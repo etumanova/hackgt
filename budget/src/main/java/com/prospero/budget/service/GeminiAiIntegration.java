@@ -14,7 +14,7 @@ import java.util.Map;
 @Service
 public class GeminiAiIntegration {
 
-    @Value("${gemini.api.key}")
+    @Value("${api.gemini-key}")
     private String apiKey;
     
     private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent";
