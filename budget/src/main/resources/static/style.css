@@ -55,7 +55,7 @@ h1 {
 }
 
 .portfolio-list {
-  height: 250px;
+  height: 300px;
   border: 1px solid #ddd;
   border-radius: 6px;
   overflow-y: auto;
@@ -160,7 +160,7 @@ nav button:hover {
 
 /* Portfolio cards */
 .portfolio-card {
-  height: 80px;
+  height: 120px;
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-bottom: 10px;

@@ -72,28 +72,24 @@
           </div>
         </div>
         <div class="side-box">
-          <div class="savings-box">
-            <span class="familjen-grotesk">Ask Gemini</span> <br>
-            <span class="savings-amount">$67.41</span> <!-- Placeholder for chat interface -->
-          </div>
           <div class="portfolio-list">
-            <div class="portfolio-card" id = "tfsa">TFSA Account
+            <div class="portfolio-card" id = "ira">IRA Account
                 <div class="account-desc">
-                    The yearly contribution limit is: $7,000 CAD.<br>
-                    <button class="btn" onclick="updateContribution('tfsa', 100)">Contribute More</button>
-                 <br>You have contributed: <span class="contribution-amount">$100.00</span> CAD.
+                    The yearly contribution limit is: $7,000 USD.<br>
+                    <button class="btn" onclick="updateContribution('ira', 100)">Contribute More</button>
+                 <br>You have contributed: <span class="contribution-amount">$100.00</span> USD.
              </div>
             </div>
                 
-            <div class="portfolio-card">CD
+            <div class="portfolio-card" id = "cd">CD
                 <div class="account-desc">
                     Your CD matures in 30 days with 5% interest.<br>
-                 <button class="btn" onclick="alert('Withdraw Early')">Withdraw Early</button>
-                 <br> You have contributed: $1,500 USD.
+                 <button class="btn" onclick="updateContribution('cd', -100)">Withdraw Early</button>
+                 <br> You have contributed: <span class="contribution-amount">$1500.00</span> USD.
              </div>
             </div>
             
-            <div class="portfolio-card">HYSA
+            <div class="portfolio-card" id = "hysa">HYSA
                 <div class="account-desc">
                     You currently have no earnings in this account.<br>
                  <button class="btn" onclick="alert('Open today')">Open today</button>
@@ -105,7 +101,9 @@
         </div>
       </div>
 
-  <div style="margin-top:30px; font-size:18px;" class="familjen-grotesk">Investment categories</div>
+  <div style="margin-top:30px; font-size:18px;" class="familjen-grotesk">
+    <a href="https://investor.vanguard.com/investor-resources-education/article/how-to-start-investing">
+        Investment Guide</a></div>
       <div style="height:600px;"></div>
     </main>
   </div>
