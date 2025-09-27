@@ -15,10 +15,17 @@
   flex: 1;
 }
 
+h1 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-family: 'Familjen Grotesk', sans-serif;
+}
+
 .side-box {
   width: 35%;
-  min-width: 300px;
-  margin-left: 1.2%;
+  min-width: 200px;
+  margin-left: 0.2%;
   display: flex;
   flex-direction: column;
 }
@@ -30,12 +37,14 @@
   padding: 15px;
   font-size: 16px;
   font-weight: 500;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  font-family: 'Familjen Grotesk', sans-serif;
 }
 
 .savings-amount {
   font-size: 24px;
   font-weight: bold;
+  font-family: 'Albert Sans', sans-serif;
 }
 
 .portfolio-list {
@@ -50,21 +59,26 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #f9faf8;
+  font-family: 'Albert Sans', sans-serif;
+
 }
 
 /* Header */
 header {
   position: fixed;
   top: 0;
-  height: 50px;
+  height: 52px;
   width: 100%;
   background: #1C2541;
+  background: linear-gradient(45deg, rgba(28, 37, 65, 1) 0%, rgba(126, 88, 214, 1) 76%, rgba(165, 127, 219, 1) 100%);
   color: white;
   display: flex;
-  align-items: center;
-  padding: 0 20px;
+  align-items: flex-start;
+  padding: 8px 40px 0 40px;
   font-weight: bold;
   z-index: 10;
+  font-family: 'Familjen Grotesk', sans-serif;
+  font-size: 32px;
 }
 
 /* Layout */
@@ -101,6 +115,11 @@ nav button {
   width: 100%;
   padding: 10px 0;
   transition: background 0.3s ease;
+  font-family: 'Albert Sans', Arial, sans-serif;
+}
+
+.familjen-grotesk {
+  font-family: 'Familjen Grotesk', Arial, sans-serif !important;
 }
 
 nav button:hover {

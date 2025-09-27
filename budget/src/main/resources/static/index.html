@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Prospera</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
@@ -11,6 +16,8 @@
   <!-- Top Nav -->
   <header>
       Prospera
+      <img src="/logoicon.svg" alt="Logo Graphic" 
+           style="height:30px; margin-left:3px;"/>
   </header>
 
   <div class="main-flex-layout">
@@ -24,7 +31,7 @@
 
     <!-- Main Content -->
     <main>
-      <h2>Welcome back, Name</h2>
+  <h1 class="familjen-grotesk">Welcome back, Name</h1>
 
 
       <div class="content-and-side">
@@ -36,7 +43,7 @@
         </div>
         <div class="side-box">
           <div class="savings-box">
-            Last month, you saved <br>
+            <span class="familjen-grotesk">Last month, you saved</span> <br>
             <span class="savings-amount">$67.41</span>
           </div>
           <div class="portfolio-list">
@@ -48,7 +55,7 @@
         </div>
       </div>
 
-      <div style="margin-top:30px; font-size:18px;">Budget categories</div>
+  <div style="margin-top:30px; font-size:18px;" class="familjen-grotesk">Budget categories</div>
       <div style="height:600px;"></div>
     </main>
   </div>
