@@ -30,7 +30,7 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-	
+    
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -79,20 +79,17 @@
 			<scope>provided</scope>
 		</dependency>
 
-<<<<<<< HEAD
-		<!-- Add the Google GenAI SDK dependency -->
-		<dependency>
-			<groupId>com.google.genai</groupId>
-			<artifactId>google-genai</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-=======
-	    <dependency>
-       		<groupId>org.springframework.boot</groupId>
-        	<artifactId>spring-boot-starter-thymeleaf</artifactId>
-    	</dependency>
+<!-- Add the Google GenAI SDK dependency -->
+<dependency>
+	<groupId>com.google.genai</groupId>
+	<artifactId>google-genai</artifactId>
+	<version>1.0.0</version>
+</dependency>
 
->>>>>>> 5afb32cdf3a18d68bab22841164bc9e60ee7f798
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
  </dependencies>
 
 	<build>
