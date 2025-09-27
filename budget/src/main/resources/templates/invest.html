@@ -67,9 +67,7 @@
 
       <div class="content-and-side">
         <div class="main-content">
-          <!-- Graph Box -->
-              <!-- SVG graph goes here -->
-              <div class="graph-box">
+              <div class="form-box">
                 <h2>Find the Best Investment Account for You</h2>
                 <form id="investment-form">
                   <label for="investment-amount">How much money are you investing?</label>
@@ -78,15 +76,17 @@
                     <option value="1000-7000">$1,000 - $7,000</option>
                     <option value="7000+">$7,000+</option>
                   </select>
-              
+                  <br>
+                  <br>
                   <label for="investment-duration">How long do you want to invest for?</label>
                   <select id="investment-duration" name="investment-duration">
                     <option value="<1"><1 year</option>
                     <option value="1-5">1 - 5 years</option>
                     <option value="5+">5+ years</option>
                   </select>
-              
-                  <button type="button" id="submit-investment">Submit</button>
+                  <br>
+                  <br>
+                  <button type="button" class="btn" id="submit-investment">Submit</button>
                 </form>
               </div>
               
@@ -95,7 +95,7 @@
                 <div class="popup-content">
                   <h3>Recommended Investment Options</h3>
                   <ul id="investment-options"></ul>
-                  <button id="close-popup">Close</button>
+                  <button id="close-popup" class="btn">Close</button>
                 </div>
               </div>
 
@@ -139,25 +139,25 @@
           <div class="portfolio-list">
             <div class="portfolio-card" id = "ira">IRA Account
                 <div class="account-desc">
-                    The yearly contribution limit is: $7,000 USD.<br>
+                    The yearly contribution limit is: $7,000 USD.
+                 <br>You have contributed: <span class="contribution-amount">$100.00</span> USD.<br>
                     <button class="btn" onclick="updateContribution('ira', 100)">Contribute More</button>
-                 <br>You have contributed: <span class="contribution-amount">$100.00</span> USD.
              </div>
             </div>
                 
             <div class="portfolio-card" id = "cd">CD
                 <div class="account-desc">
-                    Your CD matures in 30 days with 5% interest.<br>
+                    Your CD matures in 30 days with 5% interest.
+                 <br> You have contributed: <span class="contribution-amount">$1500.00</span> USD.<br>
                  <button class="btn" onclick="updateContribution('cd', -100)">Withdraw Early</button>
-                 <br> You have contributed: <span class="contribution-amount">$1500.00</span> USD.
              </div>
             </div>
             
             <div class="portfolio-card" id = "hysa">HYSA
                 <div class="account-desc">
-                    You currently have no earnings in this account.<br>
+                    You currently have no earnings in this account.
+                 <br>Current rate: 2.9%.<br>
                  <button class="btn" onclick="alert('Open today')">Open today</button>
-                 <br>Current rate: 2.9%.
              </div>
             </div>
             
