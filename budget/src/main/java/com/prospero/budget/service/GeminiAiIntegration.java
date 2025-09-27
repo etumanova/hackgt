@@ -2,6 +2,7 @@ package com.prospero.budget.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prospero.budget.model.BudgetSummary;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,35 @@ public class GeminiAiIntegration {
     public String generateBudgetRecommendations(String budgetData) {
         String prompt = "As a financial advisor for college students, analyze this budget data and provide 3-4 specific, actionable recommendations:\n\n" + budgetData;
         return generateTextFromPrompt(prompt);
+    }
+
+    /**
+     * Method to ask Gemini a question with budget context
+     */
+    public String askGemini(String userQuestion, BudgetSummary summary) {
+        String prompt = String.format(
+            "You are a personal finance assistant for college students. The user asked: '%s'. " +
+            "Given this budget summary: %s, respond briefly and clearly with practical advice.",
+            userQuestion, formatBudgetSummary(summary)
+        );
+        return generateTextFromPrompt(prompt);
+    }
+
+    /**
+     * Format BudgetSummary object into readable text for Gemini
+     */
+    private String formatBudgetSummary(BudgetSummary summary) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Monthly Income: $%.2f, ", summary.getTotalIncome()));
+        sb.append(String.format("Total Expenses: $%.2f, ", summary.getTotalExpenses()));
+        sb.append(String.format("Net Income: $%.2f. ", summary.getNetIncome()));
+
+        sb.append("Expenses Breakdown: ");
+        for (Map.Entry<String, Double> entry : summary.getExpenses().entrySet()) {
+            sb.append(String.format("%s: $%.2f, ", entry.getKey(), entry.getValue()));
+        }
+
+        return sb.toString();
     }
     
     /**
