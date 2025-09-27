@@ -9,7 +9,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="invest.css" />
+
+  <script>
+    // JavaScript to handle button clicks and update contributions
+    function updateContribution(portfolioId, amount) {
+      const contributionField = document.querySelector(`#${portfolioId} .contribution-amount`);
+      let currentAmount = parseFloat(contributionField.textContent.replace(/[^0-9.-]+/g, ""));
+      currentAmount += amount;
+      contributionField.textContent = `$${currentAmount.toFixed(2)}`;
+    }
+  </script>
+
 </head>
 <body>
 
@@ -66,11 +77,11 @@
             <span class="savings-amount">$67.41</span> <!-- Placeholder for chat interface -->
           </div>
           <div class="portfolio-list">
-            <div class="portfolio-card">TFSA Account
+            <div class="portfolio-card" id = "tfsa">TFSA Account
                 <div class="account-desc">
                     The yearly contribution limit is: $7,000 CAD.<br>
-                 <button onclick="alert('You can contribute more!')">Contribute More</button>
-                 <br>You have contributed: $1,700 CAD.
+                    <button onclick="updateContribution('tfsa', 100)">Contribute More</button>
+                 <br>You have contributed: <span class="contribution-amount">$100.00</span> CAD.
              </div>
             </div>
                 
