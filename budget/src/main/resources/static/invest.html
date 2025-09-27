@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prospera</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="invest.css" />
+</head>
+<body>
+
+  <!-- Top Nav -->
+  <header>
+      Prospera
+      <img src="/logoicon.svg" alt="Logo Graphic" 
+           style="height:30px; margin-left:3px;"/>
+  </header>
+
+  <div class="main-flex-layout">
+
+    <!-- Side Nav -->
+    <nav>
+       <button onclick="window.location.href='/'">🏠<br>Dashboard</button>
+       <button onclick="window.location.href='/budgeter.html'">💰<br>Budgets</button>
+       <button onclick="window.location.href='/invest.html'">💳<br>Investing</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+  <h1 class="familjen-grotesk">Learn About Your Investments</h1>
+
+
+      <div class="content-and-side">
+        <div class="main-content">
+          <!-- Graph Box -->
+          <div class="graph-box">
+              <!-- SVG graph goes here -->
+          </div>
+        </div>
+        <div class="side-box">
+          <div class="savings-box">
+            <span class="familjen-grotesk">Ask Gemini</span> <br>
+            <span class="savings-amount">$67.41</span> <!-- Placeholder for chat interface -->
+          </div>
+          <div class="portfolio-list">
+            <div class="portfolio-card">TFSA Account
+                <div class="account-desc">
+                    The yearly contribution limit is: $7,000 CAD.<br>
+                 <button onclick="alert('You can contribute more!')">Contribute More</button>
+                 <br>You have contributed: $1,700 CAD.
+             </div>
+            </div>
+                
+            <div class="portfolio-card">CD
+                <div class="account-desc">
+                    Your CD matures in 30 days with 5% interest.<br>
+                 <button onclick="alert('Withdraw Early')">Withdraw Early</button>
+                 <br> You have contributed: $1,500 USD.
+             </div>
+            </div>
+            
+            <div class="portfolio-card">HYSA
+                <div class="account-desc">
+                    You currently have no earnings in this account.<br>
+                 <button onclick="alert('Open today')">Open today</button>
+                 <br>Current rate: 2.9%.
+             </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+  <div style="margin-top:30px; font-size:18px;" class="familjen-grotesk">Investment categories</div>
+      <div style="height:600px;"></div>
+    </main>
+  </div>
+
+</body>
+</html>

@@ -1,38 +1,70 @@
 /* Main flex layout for page */
 .main-flex-layout {
     display: flex;
-    flex-direction: column; /* Ensure content stacks vertically if needed */
     min-height: calc(100vh - 50px);
-    overflow-x: hidden; /* Prevent horizontal overflow */
-    box-sizing: border-box; /* Include padding and borders in width/height calculations */
-    padding: 10px; /* Add padding to prevent content from touching screen edges */
-  }
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-.main-content {
-    flex: 1;
-    min-width: 300px; /* Ensure a minimum width for the main content */
-    max-width: 100%; /* Prevent content from exceeding the screen width */
-    box-sizing: border-box;
-    padding: 10px; /* Add padding inside the main content */
-    margin-left: 100px; /* Ensure content is not behind the navbar */
-    margin-top: 60px;
   }
   
-  h1, h2 {
+  /* Content and right-side box */
+  .content-and-side {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .main-content {
+    flex: 1;
+  }
+  
+  h1 {
       font-size: 30px;
       font-weight: bold;
       margin-bottom: 20px;
       font-family: 'Familjen Grotesk', sans-serif;
   }
-
+  
+  .side-box {
+    width: 35%;
+    min-width: 200px;
+    margin-left: 0.2%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .savings-box {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    font-family: 'Familjen Grotesk', sans-serif;
+  }
+  
+  .savings-amount {
+    font-size: 24px;
+    font-weight: bold;
+    font-family: 'Albert Sans', sans-serif;
+  }
+  
+  .portfolio-list {
+    height: 250px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow-y: auto;
+    background: white;
+    padding: 10px;
+  }
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f9faf8;
+    font-family: 'Albert Sans', sans-serif;
+  
+  }
+  
   /* Header */
-header {
+  header {
     position: fixed;
     top: 0;
     height: 52px;
@@ -48,9 +80,9 @@ header {
     font-family: 'Familjen Grotesk', sans-serif;
     font-size: 32px;
   }
-
+  
   /* Layout */
-main {
+  main {
     margin-left: 100px;
     margin-top: 60px;
     flex: 1;
@@ -61,9 +93,9 @@ main {
   /* Sidebar */
   nav {
     position: fixed;
-    top: 52px;
+    top: 50px;
     width: 80px;
-    height:  calc(100% - 52px);
+    height: 100%;
     background: #ffffff;
     border-right: 1px solid #ddd;
     display: flex;
@@ -94,23 +126,23 @@ main {
     background: #00C48C; /* hover effect */
     color: white;
   }
-
-form {
-    margin-bottom: 20px;
-    margin-left: 50px;
-}
-
-label {
-    margin-right: 10px;
-}
-
-input, select, button {
-    margin: 5px 0;
-    padding: 5px;
-}
-
-pre {
-    background-color: #f4f4f4;
-    padding: 30px;
+  
+  /* Graph container */
+  .graph-box {
+    width: 50%;
+    height: 300px;
     border: 1px solid #ddd;
-}
+    border-radius: 6px;
+    padding: 10px;
+    background: white;
+  }
+  
+  /* Portfolio cards */
+  .portfolio-card {
+    height: 80px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;
+  }
+  
