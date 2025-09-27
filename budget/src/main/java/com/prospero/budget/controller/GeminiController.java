@@ -1,6 +1,7 @@
 package com.prospero.budget.controller;
 
 import com.prospero.budget.service.GeminiAiIntegration;
+import com.prospero.budget.model.BudgetSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,9 +36,20 @@ public class GeminiController {
      */
     @GetMapping("/test-ask-gemini")
     public String testAskGemini(@RequestParam(defaultValue = "How can I save more money?") String question) {
-        // Mock budget summary data TO EDIT WITH BUDGET SUMMARY CLASS
-        String mockBudgetData = "Monthly Income: $1500, Total Expenses: $1200 (Housing: $600, Food: $300, Transportation: $150, Entertainment: $150), Net Income: $300";
-        return geminiAiIntegration.generateBudgetRecommendations(mockBudgetData);
+        // Creating a realistic BudgetSummary for a college student
+        BudgetSummary mockBudget = new BudgetSummary();
+
+        // Set income
+        mockBudget.setIncome(2000.0);
+
+        // Add typical college expenses
+        mockBudget.addExpense("Rent", 900.0);
+        mockBudget.addExpense("Food", 400.0);
+        mockBudget.addExpense("Tuition", 600.0);
+        mockBudget.addExpense("Bills", 200.0);
+        mockBudget.addExpense("Others", 300.0);
+        
+        return geminiAiIntegration.askGemini(question, mockBudget);
     }
 
     /*
