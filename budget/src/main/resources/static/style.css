@@ -287,6 +287,25 @@ button.btn:hover {
     background-color: #00C48C;
 }
 
+a.btn {
+    display: inline-block;
+    background-color: #6745CD;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Albert Sans', sans-serif;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    text-decoration: none;
+    margin-top: 9px;
+}
+
+a.btn:hover {
+    background-color: #00C48C;
+}
+
 
 #summary {
     margin-left: 221px; 
