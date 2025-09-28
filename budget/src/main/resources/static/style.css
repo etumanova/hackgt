@@ -90,7 +90,7 @@ header {
 /* Layout */
 main {
   margin-left: 200px;
-  margin-top: 20px;
+  margin-top: 10px;
   flex: 1;
   padding: 20px;
   overflow-y: auto;
@@ -539,17 +539,6 @@ a.btn:hover {
     margin-bottom: 1rem;
     color: #333;
     font-family: 'Albert Sans', sans-serif;
-  }
-  
-  .refresh-btn {
-    background: #00df9c;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 0.5rem;
-    color: #ffffff;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s ease;
   }
   
   .refresh-btn:hover {
