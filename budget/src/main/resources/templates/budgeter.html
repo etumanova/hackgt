@@ -62,7 +62,8 @@
                 <option value="food">Food</option>
                 <option value="tuition">Tuition</option>
                 <option value="rent">Rent</option>
-                <option value="bills">Bills</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="transport">Transport</option>
                 <option value="other">Other</option>
             </select>
 
@@ -78,7 +79,7 @@
     <script>
         const apiUrl = '/api/budget';
         let localIncome = 0;
-        let localExpenses = { food: 0, tuition: 0, rent: 0, bills: 0, other: 0 };
+        let localExpenses = { food: 0, tuition: 0, rent: 0, entertainment: 0, transport: 0, other: 0 };
 
     // When the user sets income
     async function setIncome() {
@@ -110,7 +111,7 @@
     const income = localIncome || summary.income || 0;
     const expenses = { ...summary.expenses, ...localExpenses };
 
-    const categories = ['food', 'tuition', 'rent', 'bills', 'other']; // all categories
+    const categories = ['food', 'tuition', 'rent', 'entertainment', 'transport', 'other']; // all categories
     let totalExpenses = 0;
 
     let statement = `Your monthly income is $${income.toFixed(2)}.\n\n`;
