@@ -196,6 +196,7 @@ nav button:hover {
   font-size: 16px;
   color: #555;
   margin-top: 6px;
+  margin-bottom: 20px;
   font: 14px 'Albert Sans', sans-serif;
 }
 
@@ -398,6 +399,16 @@ button.btn:hover {
     max-width: 400px;
     margin: 20px auto;
   }
+
+  .graph-box2 {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 500px;
+    height: 100%;
+    margin: 20px auto;
+  }
   
   .graph-box label {
     display: block;
@@ -488,7 +499,7 @@ button.btn:hover {
   
   .progress-bar {
     height: 20px;
-    background: #4caf50;
+    background: #00b97f;
     border-radius: 10px;
     width: 0%;
     transition: width 0.5s;
@@ -509,6 +520,7 @@ button.btn:hover {
     font-size: 1.1rem;
     margin-bottom: 1rem;
     color: #333;
+    font-family: 'Albert Sans', sans-serif;
   }
   
   .refresh-btn {
@@ -526,3 +538,8 @@ button.btn:hover {
     background: #00b97f;
   }
   
+  h2 {
+    margin-top: 30px;
+    margin-left: 20px;
+
+  }
