@@ -1,4 +1,3 @@
-// Add this script to your HTML or existing JavaScript file
 document.addEventListener('DOMContentLoaded', function() {
   // Get current page from URL
   const currentPage = window.location.pathname;

@@ -358,7 +358,7 @@ a.btn:hover {
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  display: none; /* hidden by default */
+  display: none;
   flex-direction: column;
   z-index: 999;
   overflow: hidden;
