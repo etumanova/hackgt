@@ -173,6 +173,15 @@ nav button:hover {
   background: white;
 }
 
+.form-box {
+  width: 100%;
+  height: 350px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  background: white;
+}
+
 /* Portfolio cards */
 .portfolio-card {
   height: 120px;
@@ -180,6 +189,14 @@ nav button:hover {
   border-radius: 4px;
   margin-bottom: 10px;
   padding: 10px;
+  font: 20px 'Familjen Grotesk', sans-serif;
+}
+
+.account-desc {
+  font-size: 16px;
+  color: #555;
+  margin-top: 6px;
+  font: 14px 'Albert Sans', sans-serif;
 }
 
 .subheadings {
@@ -192,7 +209,7 @@ nav button:hover {
 
 form {
     margin-bottom: 20px;
-    margin-left: 50px;
+    margin-left: 40px;
 }
 
 label {
