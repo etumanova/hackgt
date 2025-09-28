@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
       messages.innerHTML = "";
       localStorage.removeItem('chatbotMessages');
       // load welcome message
-      addMessage("Gemini", "Hi! I'm your AI financial assistant." +
+      addMessage("Penny", "Hi! I'm your AI financial assistant." +
         " Ask me anything about budgeting, saving, or managing money as a student!");
       inputField.focus();
     }
@@ -95,9 +95,9 @@ document.addEventListener("DOMContentLoaded", function() {
       console.log("Response data:", data); // Debug log
 
       if (data.reply) {
-        addMessage("Gemini", data.reply);
+        addMessage("Penny", data.reply);
       } else {
-        addMessage("Gemini", "I received your message but couldn't generate a response.", true);
+        addMessage("Penny", "I received your message but couldn't generate a response.", true);
       }
 
     } catch (error) {
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
         errorMessage += "Please check your internet connection and try again.";
       }
       
-      addMessage("Gemini", errorMessage, true);
+      addMessage("Penny", errorMessage, true);
     } finally {
       // Re-enable input
       inputField.disabled = false;
