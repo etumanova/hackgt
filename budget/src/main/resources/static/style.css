@@ -55,7 +55,6 @@ h1 {
 }
 
 .portfolio-list {
-  height: 350px;
   border: 1px solid #ddd;
   border-radius: 6px;
   overflow-y: auto;
@@ -166,7 +165,7 @@ nav button:hover {
 /* Graph container */
 .graph-box {
   width: 100%;
-  height: 350px;
+  height: 50;
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 10px;
@@ -543,3 +542,26 @@ button.btn:hover {
     margin-left: 20px;
 
   }
+
+  /* Center the pie chart inside its box */
+#expensesChart {
+  display: block;
+  margin: 0 auto;    
+  width: 100% !important;
+}
+
+.portfolio-list h2.subheadings {
+  margin-top: 8px;   
+  margin-left: 8px;      
+  margin-bottom: 8px;
+}
+
+#budget-progress-header {
+  margin-top: 8px;     
+  margin-bottom: 10px;
+}
+
+#daily-investment-tip-header {
+  margin-top: 8px;     
+  margin-bottom: 12px; 
+}
