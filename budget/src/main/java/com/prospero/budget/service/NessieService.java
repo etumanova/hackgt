@@ -29,10 +29,10 @@ public class NessieService {
         this.categoryMerchants = Map.of(
             "Food", Arrays.asList("Chipotle", "Starbucks", "Whole Foods", "McDonald's", "Subway"),
             "Entertainment", Arrays.asList("Netflix", "Spotify", "Hulu", "Apple Store", "Steam"),
-            "Rent", Arrays.asList("Landlord"),
-            "Transport", Arrays.asList("Uber", "Lyft", "Shell", "Delta Airlines"),
+            "Rent", Arrays.asList("Landlord", "Property Manager", "Apartment Complex"),
+            "Transport", Arrays.asList("Uber", "Lyft", "Delta Airlines", "Airbnb"),
             "Tuition", Arrays.asList("Georgia Tech", "Coursera", "edX"),
-            "Other", Arrays.asList("Amazon", "Target", "Airbnb", "Best Buy"));
+            "Other", Arrays.asList("Amazon", "Target"));
         // flatten all merchants into a list
         this.allMerchants = categoryMerchants.values()
                         .stream()
@@ -82,7 +82,7 @@ public class NessieService {
 
         for (int i = 0; i < numAccounts; i++) {
             Map<String, Object> accountData = Map.of(
-                    "type", rand.nextBoolean() ? "Checking" : "Savings",
+                    "type", "Checking",
                     "nickname", "Account " + (i + 1),
                     "rewards", rand.nextInt(2000),
                     "balance", (double)((int)((rand.nextDouble() * 5000)*100))/100
@@ -139,9 +139,9 @@ public class NessieService {
             }
 
             // Random withdrawals
-            int numWithdrawals = rand.nextInt(10) + 10;
+            int numWithdrawals = rand.nextInt(5) + 10; // 10 to 15
             for (int i = 0; i < numWithdrawals; i++) {
-                double amount = (double)((int)((rand.nextDouble() * 500 + 20)*100))/100;
+                double amount = (double)((int)((rand.nextDouble() * 300 + 20)*100))/100;
                 int dayNum = rand.nextInt(27) + 1; // 1–27
                 String day = (dayNum < 10 ? "0" : "") + dayNum;
                 Map<String, Object> withdrawalData = Map.of(
@@ -179,7 +179,7 @@ public class NessieService {
                     .orElse("Other");
 
             for (int i = 0; i < numBills; i++) {
-                double amount = (double)((int)((rand.nextDouble() * 300 + 30)*100))/100;
+                double amount = (double)((int)((rand.nextDouble() * 100 + 30)*100))/100;
                 int dayNum = rand.nextInt(27) + 1; // 1–27
                 String day = (dayNum < 10 ? "0" : "") + dayNum;
                 Map<String, Object> billData = Map.of(

@@ -13,5 +13,5 @@ public class Withdrawal {
     private String status;
     private String transactionDate;
     private String medium;
-    private final String category = "withdrawal";
+    private final String category = "Withdrawal";
 }
