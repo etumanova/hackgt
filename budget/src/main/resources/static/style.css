@@ -459,3 +459,53 @@ button.btn:hover {
   .popup-content button:hover {
     background-color: #0056b3;
   }
+
+  /* Progress bar on dashboard */
+  /* Progress bar styling */
+.progress-container {
+    width: 100%;
+    background: #eee;
+    border-radius: 10px;
+    margin: 0.5rem 0;
+  }
+  
+  .progress-bar {
+    height: 20px;
+    background: #4caf50;
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.5s;
+  }
+  
+  /*Refresh button for daily tip*/
+  /* Daily Tip Section */
+.tip-box {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .tip-text {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .refresh-btn {
+    background: #00df9c;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    color: #ffffff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .refresh-btn:hover {
+    background: #00b97f;
+  }
+  

@@ -58,9 +58,22 @@
       <div class="content-and-side">
         <div class="main-content">
           <!-- Graph Box -->
-          <div class="graph-box">
-              <!-- SVG graph goes here -->
-          </div>
+               <!-- Daily Tip -->
+            <section class="savings-box">
+                <h2 class="subheadings">💡 Daily Investment Tip</h2>
+                <p class="tip-text" id="tip"></p>
+                <button class="refresh-btn" onclick="showTip()">New Tip</button>
+            </section>
+
+           <!-- Budget Progress -->
+           <section class="savings-box">
+            <h2 class="subheadings">📊 Budget Progress</h2>
+            <div class="progress-container">
+              <div class="progress-bar" id="budget-bar"></div>
+            </div>
+            <p id="progress-text"></p>
+          </section>
+
         </div>
         <div class="side-box">
           <div class="savings-box">
@@ -69,25 +82,70 @@
           </div>
           <div class="familjen-grotesk subheadings">Suggested Portfolios</div>
           <div class="portfolio-list">
-            <div class="portfolio-card">Portfolio 1</div>
-            <div class="progress-bar">
-                <div class="progress" style="width: 80%;"></div>
-            <div class="portfolio-card">Portfolio 2</div>
-            <div class="progress-bar">
-                <div class="progress" style="width: 50%;"></div>
-            <div class="portfolio-card">Portfolio 3</div>
-            <div class="progress-bar">
-                <div class="progress" style="width: 30%;"></div>
-        <div class="portfolio-card">Portfolio 4</div>
-            <div class="progress-bar">
-                <div class="progress" style="width: 70%;"></div>
+            <!-- Expense Breakdown -->
+          <section class="graph-box">
+            <h2 class="subheadings">🍕 Expense Breakdown</h2>
+            <canvas id="expensesChart" width="400" height="400"></canvas>
+          </section>
           </div>
         </div>
       </div>
 
-  <div class="familjen-grotesk subheadings">Budget categories</div>
     </main>
   </div>
+
+  <script>
+    // === 1. Daily Investment Tip ===
+    const tips = [
+      "Start investing early — compound interest is your best friend.",
+      "Always keep an emergency fund before investing.",
+      "Diversify: don’t put all your eggs in one basket.",
+      "Index funds are great for beginners — low cost, broad exposure.",
+      "Set clear goals: know why you’re investing.",
+      "Stick to your plan even when markets get volatile.",
+      "Invest consistently — small amounts add up over time.",
+      "Don’t try to time the market; time in the market matters more.",
+      "High returns often mean high risk — know your risk tolerance.",
+      "Review and rebalance your portfolio at least once a year.",
+      "Avoid lifestyle inflation — invest raises and bonuses instead of spending them.",
+      "Pay off high-interest debt before putting money into the market.",
+      "Keep investment costs low — fees can eat into long-term growth.",
+      "Understand what you’re investing in; if it sounds too good to be true, it probably is."
+    ];
+    function showTip() {
+    const tip = tips[Math.floor(Math.random() * tips.length)];
+    document.getElementById("tip").textContent = tip;
+  }
+  showTip();
+    // document.getElementById("investment-tip").innerText =
+    //   tips[Math.floor(Math.random() * tips.length)];
+
+    // === 2. Budget Progress Bar ===
+    const budget = 2000;
+    const spent = 1250;
+    const percent = (spent / budget) * 100;
+    document.getElementById("budget-bar").style.width = percent + "%";
+    document.getElementById("progress-text").innerText =
+      `You've saved $${spent} of $${budget} (${percent.toFixed(1)}%)`;
+
+    // === 3. Expenses Pie Chart ===
+    const ctx = document.getElementById('expensesChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Rent', 'Food', 'Transport', 'Entertainment', 'Savings'],
+        datasets: [{
+          data: [800, 400, 150, 200, 450],
+          backgroundColor: ['#ff6384','#36a2eb','#ffcd56','#4bc0c0','#9966ff']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  </script>
+    <!-- Chatbot Button -->
 
 <div id="chatbot-button"><svg xmlns="http://www.w3.org/2000/svg" width="39" height="35" viewBox="0 0 37 33" fill="none">
   <path d="M4.65257 30.4074L2.5068 32.5532C2.18862 32.8714 1.82092 32.9431 1.40368 32.7685C0.986449 32.5939 0.777832 32.2824 0.777832 31.8341V14.8127C0.777832 14.2326 0.972178 13.7487 1.36087 13.3608C1.74956 12.973 2.23312 12.7786 2.81154 12.7778H21.4108C21.9901 12.7778 22.4736 12.9721 22.8615 13.3608C23.2493 13.7495 23.4437 14.2335 23.4445 14.8127V28.3737C23.4445 28.953 23.2502 29.4369 22.8615 29.8256C22.4728 30.2143 21.9892 30.4082 21.4108 30.4074H4.65257ZM5.81487 26H13.3704C13.5492 26 13.6987 25.9396 13.8187 25.8187C13.9388 25.6978 13.9992 25.5479 14.0001 25.3691C14.0009 25.1903 13.9404 25.0409 13.8187 24.9208C13.697 24.8008 13.5476 24.7407 13.3704 24.7407H5.81487C5.63605 24.7407 5.48662 24.8012 5.36657 24.9221C5.24652 25.043 5.18608 25.1928 5.18524 25.3716C5.1844 25.5504 5.24484 25.6999 5.36657 25.8199C5.4883 25.94 5.63773 26 5.81487 26ZM5.81487 22.2222H18.4075C18.5863 22.2222 18.7357 22.1618 18.8558 22.0409C18.9758 21.92 19.0363 21.7701 19.0371 21.5913C19.0379 21.4125 18.9775 21.2631 18.8558 21.143C18.734 21.023 18.5846 20.963 18.4075 20.963H5.81487C5.63605 20.963 5.48662 21.0234 5.36657 21.1443C5.24652 21.2652 5.18608 21.415 5.18524 21.5939C5.1844 21.7727 5.24484 21.9221 5.36657 22.0421C5.4883 22.1622 5.63773 22.2222 5.81487 22.2222ZM5.81487 18.4444H18.4075C18.5863 18.4444 18.7357 18.384 18.8558 18.2631C18.9758 18.1422 19.0363 17.9924 19.0371 17.8136C19.0379 17.6347 18.9775 17.4853 18.8558 17.3653C18.734 17.2452 18.5846 17.1852 18.4075 17.1852H5.81487C5.63605 17.1852 5.48662 17.2456 5.36657 17.3665C5.24652 17.4874 5.18608 17.6373 5.18524 17.8161C5.1844 17.9949 5.24484 18.1443 5.36657 18.2644C5.4883 18.3844 5.63773 18.4444 5.81487 18.4444Z" fill="white"/>
