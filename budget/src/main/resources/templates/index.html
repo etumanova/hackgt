@@ -135,11 +135,11 @@
 
         // === 2. Budget Progress Bar ===
         const budget = 2000;
-        const spent = 1250;
+        const spent = 1252.59;
         const percent = (spent / budget) * 100;
         document.getElementById("budget-bar").style.width = percent + "%";
         document.getElementById("progress-text").innerText =
-          `You've saved $${spent} of $${budget} (${percent.toFixed(1)}%)`;
+          `This year, you've saved $${spent} of $${budget} (${percent.toFixed(1)}%). Almost there!`;
 
         // === 3. Expenses Pie Chart ===
         const ctx = document.getElementById('expensesChart').getContext('2d');
