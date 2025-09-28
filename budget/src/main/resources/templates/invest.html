@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Prospera</title>
 
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Familjen+Grotesk:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
@@ -93,7 +95,7 @@
               <!-- Pop-up Modal -->
               <div id="investment-popup" class="popup hidden">
                 <div class="popup-content">
-                  <h3>Recommended Investment Options</h3>
+                  <h3>Your Recommended<br>Investment Options</h3>
                   <ul id="investment-options"></ul>
                   <button id="close-popup" class="btn">Close</button>
                 </div>
@@ -106,15 +108,15 @@
             
                   const options = [];
                   if (duration === '<1') {
-                    options.push('Suggested for you: Keep the money in a high-yield savings account.');
+                    options.push('Keep the money in a high-yield savings account. Look at reputable online banks like Ally or Discover that offer ~4% APY.');
                   } else if (duration === '1-5') {
-                    options.push('Suggested for you: Open a CD or a high-yield savings account');
+                    options.push('For moderate growth while still conservative, open a brokerage account at Vanguard, Fidelity, or Schwab and invest in a balanced low-fee index fund such as Vanguard LifeStrategy Conservative Growth.');
                   }else if (amount === '100-1000' && duration === '5+') {
-                    options.push('Suggested for you: Open an IRA and contribute regularly.');
+                    options.push('Open a Roth IRA (many brokerages like Fidelity or Vanguard have no-minimum IRAs) and set up automatic monthly contributions into a broad-market index fund such as Vanguard Total Stock Market (VTI).');
                   } else if (amount === '1000-7000' && duration === '5+') {
-                    options.push('Suggested for you: Open an IRA and contribute to an index fund.');
+                    options.push('Use a Roth IRA for tax-free growth; invest in a low-cost S&P 500 index fund or a target-date retirement fund that matches the year you’d retire.');
                   } else if (amount === '7000+' && duration === '5+') {
-                    options.push('Suggested for you: Open an IRA or standard brokerage account.');
+                    options.push('Max out your IRA contribution limit ($7,000 for 2024) and put the rest in a regular brokerage account; use a diversified index-fund or ETF portfolio such as VTI (US stocks) + VXUS (international).');
                   } else {
                     options.push('Consult a Financial Advisor for personalized advice.');
                   }
@@ -157,7 +159,7 @@
                 <div class="account-desc">
                     You currently have no earnings in this account.
                  <br>Current rate: 2.9%.<br>
-                 <a class="btn" href="https://www.wealthsimple.com/en-ca/chequing?utm_source=google&utm_medium=performance&campaign_id=19965801117&adgroup_id=145886557137&ad_id=656699859997&keyword=wealthsimple%20cash%20account&gad_source=1&gad_campaignid=19965801117&gbraid=0AAAAADN8OOasGnk_Tw2HPIHwCb4rpq0qx&gclid=CjwKCAjwlt7GBhAvEiwAKal0cmoBcFWSg199SxD0pB7CPyCvZcN18xwxe6DErnP0qL2uuutYY8VQLxoCltoQAvD_BwE">Open HYSA</a>
+                 <a class="btn" target="_blank" rel="noopener noreferrer" href="https://www.wealthsimple.com/en-ca/chequing?utm_source=google&utm_medium=performance&campaign_id=19965801117&adgroup_id=145886557137&ad_id=656699859997&keyword=wealthsimple%20cash%20account&gad_source=1&gad_campaignid=19965801117&gbraid=0AAAAADN8OOasGnk_Tw2HPIHwCb4rpq0qx&gclid=CjwKCAjwlt7GBhAvEiwAKal0cmoBcFWSg199SxD0pB7CPyCvZcN18xwxe6DErnP0qL2uuutYY8VQLxoCltoQAvD_BwE">Open HYSA</a>
              </div>
             </div>
             

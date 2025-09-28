@@ -440,7 +440,7 @@ a.btn:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-  
+/*   
   .graph-box button {
     padding: 10px 15px;
     background-color: #007bff;
@@ -452,7 +452,7 @@ a.btn:hover {
   
   .graph-box button:hover {
     background-color: #0056b3;
-  }
+  } */
   
   .popup {
     position: fixed;
@@ -495,15 +495,15 @@ a.btn:hover {
   
   .popup-content button {
     padding: 10px 15px;
-    background-color: #007bff;
+    background-color: #6745CD;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
   }
   
   .popup-content button:hover {
-    background-color: #0056b3;
+    background-color: #00b97f;
   }
 
   /* Progress bar on dashboard */
@@ -581,7 +581,7 @@ a.btn:hover {
   cursor: pointer;
   color: #555;
   margin-right: 4px; 
-  margin-top: 5px;
+  margin-top: 4px;
 }
 
 /* Tooltip text box (hidden by default) */
