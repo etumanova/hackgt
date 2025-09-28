@@ -22,78 +22,78 @@ body {
     padding: 10px; /* Add padding inside the main content */
     margin-left: 100px; /* Ensure content is not behind the navbar */
     margin-top: 60px;
-  }
+}
   
-  h1, h2 {
-      font-size: 30px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      font-family: 'Familjen Grotesk', sans-serif;
-  }
-
-  /* Header */
-header {
-    position: fixed;
-    top: 0;
-    height: 52px;
-    width: 100%;
-    background: #1C2541;
-    background: linear-gradient(45deg, rgba(28, 37, 65, 1) 0%, rgba(126, 88, 214, 1) 76%, rgba(165, 127, 219, 1) 100%);
-    color: white;
-    display: flex;
-    align-items: flex-start;
-    padding: 8px 40px 0 40px;
+h1, h2 {
+    font-size: 30px;
     font-weight: bold;
-    z-index: 10;
+    margin-bottom: 20px;
     font-family: 'Familjen Grotesk', sans-serif;
-    font-size: 32px;
-  }
+}
 
-  /* Layout */
+/* Header */
+header {
+  position: fixed;
+  top: 0;
+  height: 52px;
+  width: 100%;
+  background: #1C2541;
+  background: linear-gradient(45deg, rgba(28, 37, 65, 1) 0%, rgba(126, 88, 214, 1) 76%, rgba(165, 127, 219, 1) 100%);
+  color: white;
+  display: flex;
+  align-items: flex-start;
+  padding: 8px 40px 0 40px;
+  font-weight: bold;
+  z-index: 10;
+  font-family: 'Familjen Grotesk', sans-serif;
+  font-size: 32px;
+}
+
+/* Layout */
 main {
-    margin-left: 100px;
-    margin-top: 60px;
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-  }
+  margin-left: 100px;
+  margin-top: 60px;
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Sidebar */
+nav {
+  position: fixed;
+  top: 52px;
+  width: 80px;
+  height:  calc(100% - 52px);
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  z-index: 9;
+}
   
-  /* Sidebar */
-  nav {
-    position: fixed;
-    top: 52px;
-    width: 80px;
-    height:  calc(100% - 52px);
-    background: #ffffff;
-    border-right: 1px solid #ddd;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
-    z-index: 9;
-  }
-   
-  /* Sidebar buttons */
-  nav button {
-    background: none;
-    border: none;
-    color: black;
-    margin: 20px 0;
-    cursor: pointer;
-    width: 100%;
-    padding: 10px 0;
-    transition: background 0.3s ease;
-    font-family: 'Albert Sans', Arial, sans-serif;
-  }
-  
-  .familjen-grotesk {
-    font-family: 'Familjen Grotesk', Arial, sans-serif !important;
-  }
-  
-  nav button:hover {
-    background: #00C48C; /* hover effect */
-    color: white;
-  }
+/* Sidebar buttons */
+nav button {
+  background: none;
+  border: none;
+  color: black;
+  margin: 20px 0;
+  cursor: pointer;
+  width: 100%;
+  padding: 10px 0;
+  transition: background 0.3s ease;
+  font-family: 'Albert Sans', Arial, sans-serif;
+}
+
+.familjen-grotesk {
+  font-family: 'Familjen Grotesk', Arial, sans-serif !important;
+}
+
+nav button:hover {
+  background: #00C48C; /* hover effect */
+  color: white;
+}
 
 form {
     margin-bottom: 20px;
@@ -113,4 +113,62 @@ pre {
     background-color: #f4f4f4;
     padding: 30px;
     border: 1px solid #ddd;
+}
+
+.selectors {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.summary {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.expenses-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.expense-card {
+    background-color: rgb(170, 115, 224);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+    flex: 1 1 250px;
+}
+
+.expense-card h4 {
+    margin: 0 0 10px 0;
+    cursor: pointer;
+}
+
+.expense-amount {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.transactions {
+    display: none;
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.transactions li {
+    font-size: 0.9em;
+    padding: 2px 0;
+}
+
+.chart-container {
+    width: 80%;
+    margin: auto;
+    margin-bottom: 40px;
 }
