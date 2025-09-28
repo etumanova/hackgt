@@ -398,6 +398,15 @@ button.btn:hover {
     max-width: 400px;
     margin: 20px auto;
   }
+
+  .graph-box2 {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 450px;
+    margin: 20px auto;
+  }
   
   .graph-box label {
     display: block;
