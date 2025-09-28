@@ -14,5 +14,5 @@ public class Bill {
     private String status;
     private String payee; // payee: who the payment is made for i believe
     private String paymentDate; // YYYY-MM-DD (payment_date)
-    private final String category = "bill";
+    private final String category = "Bills";
 }

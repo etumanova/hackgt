@@ -17,11 +17,27 @@ public class NessieService {
 
     private final ApiConfig apiConfig;
     private final String apiKey;
+    private Map<String, List<String>> categoryMerchants;
+    private List<String> allMerchants;
+    private CustomerTransactions transactions;
 
     @Autowired
     public NessieService(ApiConfig apiConfig) {
         this.apiConfig = apiConfig;
         this.apiKey = "?key=" + apiConfig.getNessieApiKey();
+        this.transactions = new CustomerTransactions();
+        this.categoryMerchants = Map.of(
+            "Food", Arrays.asList("Chipotle", "Starbucks", "Whole Foods", "McDonald's", "Subway"),
+            "Entertainment", Arrays.asList("Netflix", "Spotify", "Hulu", "Apple Store", "Steam"),
+            "Rent", Arrays.asList("Landlord"),
+            "Transport", Arrays.asList("Uber", "Lyft", "Shell", "Delta Airlines"),
+            "Tuition", Arrays.asList("Georgia Tech", "Coursera", "edX"),
+            "Other", Arrays.asList("Amazon", "Target", "Airbnb", "Best Buy"));
+        // flatten all merchants into a list
+        this.allMerchants = categoryMerchants.values()
+                        .stream()
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
     }
 
     public Customer initializeSampleCustomer() {
@@ -33,140 +49,240 @@ public class NessieService {
     private Customer importAndCloneEnterpriseCustomer() {
         Random rand = new Random();
 
-        // get enterprise customers and pick a random one 
+        // === 1. Fetch enterprise customers ===
         String enterpriseCustomerUrl = apiConfig.getNessieBaseUrl() + "/enterprise/customers" + apiKey;
         ResponseEntity<Map> customerResponse = restTemplate.exchange(
                 enterpriseCustomerUrl, HttpMethod.GET, null, Map.class
         );
         List<Map<String, Object>> customers = (List<Map<String, Object>>) customerResponse.getBody().get("results");
+
+        // Pick a random enterprise customer
         Map<String, Object> selectedCustomer = customers.get(rand.nextInt(customers.size()));
-        String customerId = (String) selectedCustomer.get("_id");
+        System.out.println("Selected enterprise customer: " + selectedCustomer.get("_id"));
 
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        System.out.println("Selected customer: " + selectedCustomer.get("_id"));
-
-        // get all enterprise accounts for that random customer
-        String enterpriseAccountsUrl = apiConfig.getNessieBaseUrl() + "/enterprise/accounts" + apiKey;
-        ResponseEntity<Map> accountsResponse = restTemplate.exchange(
-                enterpriseAccountsUrl, HttpMethod.GET, null, Map.class
-        );
-        List<Map<String, Object>> allAccounts = (List<Map<String, Object>>) accountsResponse.getBody().get("results");
-        List<Map<String, Object>> customerAccounts = allAccounts.stream()
-                .filter(a -> a.get("customer_id").equals(customerId))
-                .collect(Collectors.toList());
-
-        // fetch enterprise deposits, withdrawals, bills
-        List<Map<String, Object>> allDeposits = fetchEnterpriseEndpoint("deposits");
-        List<Map<String, Object>> allWithdrawals = fetchEnterpriseEndpoint("withdrawals");
-        List<Map<String, Object>> allBills = fetchEnterpriseEndpoint("bills");
-
-        // CREATE NEW CUSTOMER!
-        Map<String, Object> newCustomerMap = Map.of(
-                //"_id", customerId,
+        // === 2. Create new customer in sandbox ===
+        Map<String, Object> newCustomerData = Map.of(
                 "first_name", selectedCustomer.get("first_name"),
                 "last_name", selectedCustomer.get("last_name"),
                 "address", selectedCustomer.get("address")
         );
-        ResponseEntity<Map> createdCustomer = restTemplate.postForEntity(
-                apiConfig.getNessieBaseUrl() + "/customers" + apiKey, newCustomerMap, Map.class
+        ResponseEntity<Map> newCustomerResponse = restTemplate.postForEntity(
+                apiConfig.getNessieBaseUrl() + "/customers" + apiKey,
+                newCustomerData,
+                Map.class
         );
-        String newCustomerId = (String) createdCustomer.getBody().get("_id");
 
-        // clone accounts for customer
-        List<Account> clonedAccounts = new ArrayList<>();
-        for (Map<String, Object> acc : customerAccounts) {
-            Map<String, Object> accMap = Map.of(
-                //"_id", acc.get("_id"),
-                "type", acc.get("type"),
-                "nickname", acc.get("nickname"),
-                "rewards", acc.getOrDefault("rewards", 0),
-                "balance", acc.get("balance"),
-                "customer_id", newCustomerId
+        String newCustomerId = (String) ((Map<String, Object>) newCustomerResponse.getBody().get("objectCreated")).get("_id");
+        String customerName = selectedCustomer.get("first_name") + " " + selectedCustomer.get("last_name");
+        System.out.println("Created new customer: " + newCustomerId);
+
+        // === 3. Generate random accounts ===
+        int numAccounts = rand.nextInt(3) + 3; // 3–5 accounts
+        List<Account> accounts = new ArrayList<>();
+
+        for (int i = 0; i < numAccounts; i++) {
+            Map<String, Object> accountData = Map.of(
+                    "type", rand.nextBoolean() ? "Checking" : "Savings",
+                    "nickname", "Account " + (i + 1),
+                    "rewards", rand.nextInt(2000),
+                    "balance", (double)((int)((rand.nextDouble() * 5000)*100))/100
             );
+
             ResponseEntity<Map> accResp = restTemplate.postForEntity(
-                    apiConfig.getNessieBaseUrl() + "/accounts" + apiKey, accMap, Map.class
+                    apiConfig.getNessieBaseUrl() + "/customers/" + newCustomerId + "/accounts" + apiKey,
+                    accountData,
+                    Map.class
             );
 
-            Account account = new Account();
-            account.setId((String) accResp.getBody().get("_id"));
-            account.setType((String) acc.get("type"));
-            account.setNickname((String) acc.get("nickname"));
-            account.setBalance(((Number) acc.get("balance")).doubleValue());
-            clonedAccounts.add(account);
+            String accountId = (String) ((Map<String, Object>) accResp.getBody().get("objectCreated")).get("_id");
+            Account acc = new Account();
+            acc.setId(accountId);
+            acc.setType((String) accountData.get("type"));
+            acc.setNickname((String) accountData.get("nickname"));
+            acc.setBalance(((Number) accountData.get("balance")).doubleValue());
+            accounts.add(acc);
         }
 
-        // clone deposits
-        List<Deposit> deposits = clonedAccounts.stream()
-                .flatMap(account -> allDeposits.stream()
-                        .filter(d -> d.get("account_id").equals(getOriginalAccountId(customerAccounts, account)))
-                        .map(d -> {
-                            Map<String, Object> depositMap = Map.of(
-                                    "medium", d.getOrDefault("medium", "balance"),
-                                    "transaction_date", d.get("transaction_date"),
-                                    "status", d.get("status"),
-                                    "amount", d.get("amount"),
-                                    "payee_id", account.getId()
-                            );
-                            ResponseEntity<Map> depResp = restTemplate.postForEntity(
-                                    apiConfig.getNessieBaseUrl() + "/deposits" + apiKey, depositMap, Map.class
-                            );
-                            Deposit dep = new Deposit();
-                            dep.setId((String) depResp.getBody().get("_id"));
-                            dep.setAmount(((Number) d.get("amount")).doubleValue());
-                            dep.setTransactionDate((String) d.get("transaction_date"));
-                            dep.setStatus((String) d.get("status"));
-                            dep.setType("deposit");
-                            return dep;
-                        })
-                ).collect(Collectors.toList());
+        // === 4. Generate random transactions for each account ===
+        List<Deposit> deposits = new ArrayList<>();
+        List<Withdrawal> withdrawals = new ArrayList<>();
+        List<Bill> bills = new ArrayList<>();
+        List<Purchase> purchases = new ArrayList<>();
 
-        // clone withdrawals
-        List<Withdrawal> withdrawals = clonedAccounts.stream()
-                .flatMap(account -> allWithdrawals.stream()
-                        .filter(w -> w.get("account_id").equals(getOriginalAccountId(customerAccounts, account)))
-                        .map(w -> {
-                            Withdrawal withdrawal = new Withdrawal();
-                            withdrawal.setId((String) w.get("_id"));
-                            withdrawal.setAccountId(account.getId());
-                            withdrawal.setAmount(((Number) w.get("amount")).doubleValue());
-                            withdrawal.setTransactionDate((String) w.get("transaction_date"));
-                            withdrawal.setStatus((String) w.get("status"));
-                            withdrawal.setMedium((String) w.getOrDefault("medium", "balance"));
-                            return withdrawal;
-                        })
-                ).collect(Collectors.toList());
+        // make a number of deposits, withdrawals, and bills per account
+        for (Account acc : accounts) {
+            // Random deposits
+            int numDeposits = rand.nextInt(30) + 30; // 30 to 60 deposits
+            for (int i = 0; i < numDeposits; i++) {
+                double amount = (double)((int)((rand.nextDouble() * 1000 + 50)*100))/100;
+                int dayNum = rand.nextInt(27) + 1; // 1–27
+                String day = (dayNum < 10 ? "0" : "") + dayNum;
+                Map<String, Object> depositData = Map.of(
+                        "medium", "balance",
+                        "transaction_date", "2025-0" + (rand.nextInt(9) + 1) + "-" + day,
+                        "status", "completed",
+                        "amount", amount
+                );
+                ResponseEntity<Map> depResp = restTemplate.postForEntity(
+                        apiConfig.getNessieBaseUrl() + "/accounts/" + acc.getId() + "/deposits" + apiKey,
+                        depositData,
+                        Map.class
+                );
 
-        // clone bills
-        List<Bill> bills = clonedAccounts.stream()
-                .flatMap(account -> allBills.stream()
-                        .filter(b -> b.get("account_id").equals(getOriginalAccountId(customerAccounts, account)))
-                        .map(b -> {
-                            Bill bill = new Bill();
-                            bill.setId((String) b.get("_id"));
-                            bill.setAccountId(account.getId());
-                            bill.setAmount(((Number) b.get("amount")).doubleValue());
-                            bill.setPaymentDate((String) b.get("payment_date"));
-                            bill.setPayee((String) b.get("payee"));
-                            bill.setStatus((String) b.get("status"));
-                            return bill;
-                        })
-                ).collect(Collectors.toList());
+                Deposit dep = new Deposit();
+                dep.setId((String) ((Map<String, Object>) depResp.getBody().get("objectCreated")).get("_id"));
+                dep.setAmount(amount);
+                dep.setTransactionDate((String) depositData.get("transaction_date"));
+                dep.setStatus("completed");
+                dep.setType("deposit");
+                deposits.add(dep);
+            }
 
-        // build the customer profile
-        Customer profile = new Customer();
-        profile.setCustomerId(newCustomerId);
-        profile.setName(selectedCustomer.get("first_name") + " " + selectedCustomer.get("last_name"));
-        profile.setAccounts(clonedAccounts);
+            // Random withdrawals
+            int numWithdrawals = rand.nextInt(10) + 10;
+            for (int i = 0; i < numWithdrawals; i++) {
+                double amount = (double)((int)((rand.nextDouble() * 500 + 20)*100))/100;
+                int dayNum = rand.nextInt(27) + 1; // 1–27
+                String day = (dayNum < 10 ? "0" : "") + dayNum;
+                Map<String, Object> withdrawalData = Map.of(
+                        "medium", "balance",
+                        "transaction_date", "2025-0" + (rand.nextInt(9) + 1) + "-" + day,
+                        "status", "completed",
+                        "amount", amount
+                );
+                ResponseEntity<Map> wResp = restTemplate.postForEntity(
+                        apiConfig.getNessieBaseUrl() + "/accounts/" + acc.getId() + "/withdrawals" + apiKey,
+                        withdrawalData,
+                        Map.class
+                );
 
-        CustomerTransactions transactions = new CustomerTransactions();
+                Withdrawal w = new Withdrawal();
+                w.setId((String) ((Map<String, Object>) wResp.getBody().get("objectCreated")).get("_id"));
+                w.setAccountId(acc.getId());
+                w.setAmount(amount);
+                w.setStatus("completed");
+                w.setMedium("balance");
+                w.setTransactionDate((String) withdrawalData.get("transaction_date"));
+                withdrawals.add(w);
+            }
+
+            // Random bills
+            int numBills = rand.nextInt(10);
+            String merchant = allMerchants.get(rand.nextInt(allMerchants.size()));
+
+            // Find its category
+            String category = categoryMerchants.entrySet()
+                    .stream()
+                    .filter(e -> e.getValue().contains(merchant))
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse("Other");
+
+            for (int i = 0; i < numBills; i++) {
+                double amount = (double)((int)((rand.nextDouble() * 300 + 30)*100))/100;
+                int dayNum = rand.nextInt(27) + 1; // 1–27
+                String day = (dayNum < 10 ? "0" : "") + dayNum;
+                Map<String, Object> billData = Map.of(
+                        "status", "pending",
+                        "payee", merchant,
+                        "nickname", "Bill Payment",
+                        "payment_date", "2025-0" + (rand.nextInt(9) + 1) + "-" + day,
+                        "payment_amount", amount
+                );
+                ResponseEntity<Map> billResp = restTemplate.postForEntity(
+                        apiConfig.getNessieBaseUrl() + "/accounts/" + acc.getId() + "/bills" + apiKey,
+                        billData,
+                        Map.class
+                );
+
+                Bill bill = new Bill();
+                Map<String, Object> createdBill = (Map<String, Object>) billResp.getBody().get("objectCreated");
+                bill.setId((String) (createdBill).get("_id"));
+                bill.setAccountId(acc.getId());
+                bill.setAmount(amount);
+                bill.setPaymentDate((String) billData.get("payment_date"));
+                bill.setPayee((String) billData.get("payee"));
+                bill.setStatus((String) createdBill.get("status"));
+                bills.add(bill);
+            }
+
+            // === Purchases ===
+            int numPurchases = rand.nextInt(15) + 40; // 40–55 purchases per account
+
+            // Random purchases
+            for (int i = 0; i < numPurchases; i++) {
+                // pick random category
+                // Randomly pick a merchant
+                String merchantPurchase = allMerchants.get(rand.nextInt(allMerchants.size()));
+
+                // Find its category
+                String categoryPurchase = categoryMerchants.entrySet()
+                        .stream()
+                        .filter(e -> e.getValue().contains(merchant))
+                        .map(Map.Entry::getKey)
+                        .findFirst()
+                        .orElse("Other");
+
+                Map<String, Object> merchantData = Map.of(
+                    "name", merchantPurchase,
+                    "category", categoryPurchase
+                );
+
+                ResponseEntity<Map> merchantResp = restTemplate.postForEntity(
+                    apiConfig.getNessieBaseUrl() + "/merchants" + apiKey,
+                    merchantData,
+                    Map.class
+                );
+
+                Map<String, Object> createdMerchant = (Map<String, Object>) merchantResp.getBody().get("objectCreated");
+                String merchantId = (String) createdMerchant.get("_id");
+
+                double amount = (double)((int)((rand.nextDouble() * 200 + 10) * 100)) / 100;
+                int dayNum = rand.nextInt(27) + 1;
+                String day = (dayNum < 10 ? "0" : "") + dayNum;
+
+                Map<String, Object> purchaseData = Map.of(
+                    "merchant_id", merchantId,
+                    "purchase_date", "2025-0" + (rand.nextInt(9) + 1) + "-" + day,
+                    "amount", amount,
+                    "status", "completed",
+                    "medium", "balance"
+                );
+
+                ResponseEntity<Map> purchaseResp = restTemplate.postForEntity(
+                    apiConfig.getNessieBaseUrl() + "/accounts/" + acc.getId() + "/purchases" + apiKey,
+                    purchaseData,
+                    Map.class
+                );
+
+                Purchase purchase = new Purchase();
+                Map<String, Object> createdPurchase = (Map<String, Object>) purchaseResp.getBody().get("objectCreated");
+                purchase.setId((String) createdPurchase.get("_id"));
+                purchase.setMerchantName(merchant);
+                purchase.setCategory(category);
+                purchase.setPurchaseDate((String) purchaseData.get("purchase_date"));
+                purchase.setAmount(amount);
+                purchase.setAccountId(acc.getId());
+                purchases.add(purchase);
+            }
+        }
+
+        // === 5. Build the Customer profile ===
+        Customer newProfile = new Customer();
+        newProfile.setCustomerId(newCustomerId);
+        newProfile.setName(selectedCustomer.get("first_name") + " " + selectedCustomer.get("last_name"));
+        newProfile.setAccounts(accounts);
+
+        // CustomerTransactions transactions = new CustomerTransactions();
         transactions.setDeposits(deposits);
         transactions.setWithdrawals(withdrawals);
         transactions.setBills(bills);
-        //transactions.setPurchases(purchases);
+        transactions.setPurchases(purchases);
+        newProfile.setTransactions(transactions);
 
-        profile.setTransactions(transactions);
+        System.out.println("Created " + accounts.size() + " accounts, " + deposits.size() + " deposits, " + withdrawals.size() + " withdrawals, " + bills.size() + " bills, " + purchases.size() + " purchases for " + newCustomerId);
 
-        return profile;
+        return newProfile;
     }
 
     // Helper to fetch enterprise endpoint
@@ -178,19 +294,12 @@ public class NessieService {
         return (List<Map<String, Object>>) resp.getBody().get("results");
     }
 
-    /**
-     * Helper method to get original account ID from the nickname
-     * 
-     * @param originalAccounts The list of original accounts
-     * @param account The account object
-     * @return Returns ID of original account if the nickname exists
-     */
-    private String getOriginalAccountId(List<Map<String, Object>> originalAccounts, Account account) {
-        return originalAccounts.stream()
-                .filter(a -> a.get("nickname").equals(account.getNickname()))
-                .findFirst()
-                .map(a -> (String) a.get("_id"))
-                .orElse(null);
+    // provides a random subset of the provided list
+    private List<Map<String, Object>> randomSubset(List<Map<String, Object>> source, int count) {
+        Random rand = new Random();
+        List<Map<String, Object>> copy = new ArrayList<>(source);
+        Collections.shuffle(copy);
+        return copy.subList(0, Math.min(count, copy.size()));
     }
 
     /**
@@ -199,103 +308,103 @@ public class NessieService {
      * @param customerId The ID of the customer we want to get the transactions of 
      * @return Transactions of the customer
      */
-    public CustomerTransactions getTransactions(String customerId) {
-        // fetch accounts
-        String accountsUrl = apiConfig.getNessieBaseUrl() + "/customers/" + customerId + "/accounts" + apiKey;
-        ResponseEntity<List<Account>> accountResponse = restTemplate.exchange(
-                accountsUrl,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<Account>>() {}
-        );
-        List<Account> accounts = accountResponse.getBody();
+    // public CustomerTransactions getTransactions(String customerId) {
+    //     // fetch accounts
+    //     String accountsUrl = apiConfig.getNessieBaseUrl() + "/customers/" + customerId + "/accounts" + apiKey;
+    //     ResponseEntity<List<Account>> accountResponse = restTemplate.exchange(
+    //             accountsUrl,
+    //             HttpMethod.GET,
+    //             null,
+    //             new ParameterizedTypeReference<List<Account>>() {}
+    //     );
+    //     List<Account> accounts = accountResponse.getBody();
 
-        List<Deposit> deposits = new ArrayList<>();
-        List<Withdrawal> withdrawals = new ArrayList<>();
-        List<Bill> bills = new ArrayList<>();
-        List<Purchase> purchases = new ArrayList<>();
+    //     List<Deposit> deposits = new ArrayList<>();
+    //     List<Withdrawal> withdrawals = new ArrayList<>();
+    //     List<Bill> bills = new ArrayList<>();
+    //     List<Purchase> purchases = new ArrayList<>();
 
-        for (Account account : accounts) {
-            String accId = account.getId();
+    //     for (Account account : accounts) {
+    //         String accId = account.getId();
 
-            // Deposits
-            ResponseEntity<List<Map<String, Object>>> depositResp = restTemplate.exchange(
-                    apiConfig.getNessieBaseUrl() + "/accounts/" + accId + "/deposits" + apiKey,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<List<Map<String, Object>>>() {}
-            );
-            for (Map<String, Object> d : depositResp.getBody()) {
-                Deposit deposit = new Deposit();
-                deposit.setId((String) d.get("_id"));
-                deposit.setAmount(((Number) d.get("amount")).doubleValue());
-                deposit.setStatus((String) d.get("status"));
-                deposit.setTransactionDate((String) d.get("transaction_date"));
-                deposit.setId(accId);
-                deposit.setType("deposit");
-                deposits.add(deposit);
-            }
+    //         // Deposits
+    //         ResponseEntity<List<Map<String, Object>>> depositResp = restTemplate.exchange(
+    //                 apiConfig.getNessieBaseUrl() + "/accounts/" + accId + "/deposits" + apiKey,
+    //                 HttpMethod.GET,
+    //                 null,
+    //                 new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+    //         );
+    //         for (Map<String, Object> d : depositResp.getBody()) {
+    //             Deposit deposit = new Deposit();
+    //             deposit.setId((String) d.get("_id"));
+    //             deposit.setAmount(((Number) d.get("amount")).doubleValue());
+    //             deposit.setStatus((String) d.get("status"));
+    //             deposit.setTransactionDate((String) d.get("transaction_date"));
+    //             deposit.setId(accId);
+    //             deposit.setType("deposit");
+    //             deposits.add(deposit);
+    //         }
 
-            // Withdrawals
-            ResponseEntity<List<Map<String, Object>>> withdrawalResp = restTemplate.exchange(
-                    apiConfig.getNessieBaseUrl() + "/accounts/" + accId + "/withdrawals" + apiKey,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<List<Map<String, Object>>>() {}
-            );
-            for (Map<String, Object> w : withdrawalResp.getBody()) {
-                Withdrawal withdrawal = new Withdrawal();
-                withdrawal.setId((String) w.get("_id"));
-                withdrawal.setAmount(((Number) w.get("amount")).doubleValue());
-                withdrawal.setStatus((String) w.get("status"));
-                withdrawal.setTransactionDate((String) w.get("transaction_date"));
-                withdrawal.setMedium((String) w.getOrDefault("medium", "balance"));
-                withdrawal.setAccountId(accId);
-                withdrawals.add(withdrawal);
-            }
+    //         // Withdrawals
+    //         ResponseEntity<List<Map<String, Object>>> withdrawalResp = restTemplate.exchange(
+    //                 apiConfig.getNessieBaseUrl() + "/accounts/" + accId + "/withdrawals" + apiKey,
+    //                 HttpMethod.GET,
+    //                 null,
+    //                 new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+    //         );
+    //         for (Map<String, Object> w : withdrawalResp.getBody()) {
+    //             Withdrawal withdrawal = new Withdrawal();
+    //             withdrawal.setId((String) w.get("_id"));
+    //             withdrawal.setAmount(((Number) w.get("amount")).doubleValue());
+    //             withdrawal.setStatus((String) w.get("status"));
+    //             withdrawal.setTransactionDate((String) w.get("transaction_date"));
+    //             withdrawal.setMedium((String) w.getOrDefault("medium", "balance"));
+    //             withdrawal.setAccountId(accId);
+    //             withdrawals.add(withdrawal);
+    //         }
 
-            // Bills
-            ResponseEntity<List<Map<String, Object>>> billsResp = restTemplate.exchange(
-                    apiConfig.getNessieBaseUrl() + "/accounts/" + accId + "/bills" + apiKey,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<List<Map<String, Object>>>() {}
-            );
-            for (Map<String, Object> b : billsResp.getBody()) {
-                Bill bill = new Bill();
-                bill.setId((String) b.get("_id"));
-                bill.setAmount(((Number) b.get("amount")).doubleValue());
-                bill.setStatus((String) b.get("status"));
-                bill.setPaymentDate((String) b.get("payment_date"));
-                bill.setPayee((String) b.get("payee"));
-                bill.setAccountId(accId);
-                bills.add(bill);
-            }
+    //         // Bills
+    //         ResponseEntity<List<Map<String, Object>>> billsResp = restTemplate.exchange(
+    //                 apiConfig.getNessieBaseUrl() + "/accounts/" + accId + "/bills" + apiKey,
+    //                 HttpMethod.GET,
+    //                 null,
+    //                 new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+    //         );
+    //         for (Map<String, Object> b : billsResp.getBody()) {
+    //             Bill bill = new Bill();
+    //             bill.setId((String) b.get("_id"));
+    //             bill.setAmount(((Number) b.get("amount")).doubleValue());
+    //             bill.setStatus((String) b.get("status"));
+    //             bill.setPaymentDate((String) b.get("payment_date"));
+    //             bill.setPayee((String) b.get("payee"));
+    //             bill.setAccountId(accId);
+    //             bills.add(bill);
+    //         }
 
-            // Purchases (if you have them)
-            ResponseEntity<List<Map<String, Object>>> purchasesResp = restTemplate.exchange(
-                    apiConfig.getNessieBaseUrl() + "/accounts/" + accId + "/purchases" + apiKey,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<List<Map<String, Object>>>() {}
-            );
-            for (Map<String, Object> p : purchasesResp.getBody()) {
-                Purchase purchase = new Purchase();
-                purchase.setId((String) p.get("_id"));
-                purchase.setAmount(((Number) p.get("amount")).doubleValue());
-                purchase.setPurchaseDate((String) p.get("purchase_date"));
-                purchase.setMerchantName((String) p.get("merchant_name"));
-                purchase.setCategory("purchase (FIGURE OUT HOW TO CATEGORIZE)");
-                purchases.add(purchase);
-            }
-        }
+    //         // Purchases (if you have them)
+    //         ResponseEntity<List<Map<String, Object>>> purchasesResp = restTemplate.exchange(
+    //                 apiConfig.getNessieBaseUrl() + "/accounts/" + accId + "/purchases" + apiKey,
+    //                 HttpMethod.GET,
+    //                 null,
+    //                 new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+    //         );
+    //         for (Map<String, Object> p : purchasesResp.getBody()) {
+    //             Purchase purchase = new Purchase();
+    //             purchase.setId((String) p.get("_id"));
+    //             purchase.setAmount(((Number) p.get("amount")).doubleValue());
+    //             purchase.setPurchaseDate((String) p.get("purchase_date"));
+    //             purchase.setMerchantName((String) p.get("merchant_name"));
+    //             purchase.setCategory((String) p.get("category"));
+    //             purchases.add(purchase);
+    //         }
+    //     }
 
-        CustomerTransactions customerTransactions = new CustomerTransactions();
-        customerTransactions.setDeposits(deposits);
-        customerTransactions.setWithdrawals(withdrawals);
-        customerTransactions.setBills(bills);
-        customerTransactions.setPurchases(purchases);
+    //     CustomerTransactions customerTransactions = new CustomerTransactions();
+    //     customerTransactions.setDeposits(deposits);
+    //     customerTransactions.setWithdrawals(withdrawals);
+    //     customerTransactions.setBills(bills);
+    //     customerTransactions.setPurchases(purchases);
 
-        return customerTransactions;
-    }   
+    //     return customerTransactions;
+    // }   
 }
