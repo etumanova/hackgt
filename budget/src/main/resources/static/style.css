@@ -522,17 +522,6 @@ button.btn:hover {
     font-family: 'Albert Sans', sans-serif;
   }
   
-  .refresh-btn {
-    background: #00df9c;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 0.5rem;
-    color: #ffffff;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-  
   .refresh-btn:hover {
     background: #00b97f;
   }
