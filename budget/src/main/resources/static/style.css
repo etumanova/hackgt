@@ -90,7 +90,7 @@ header {
 /* Layout */
 main {
   margin-left: 200px;
-  margin-top: 20px;
+  margin-top: 10px;
   flex: 1;
   padding: 20px;
   overflow-y: auto;
